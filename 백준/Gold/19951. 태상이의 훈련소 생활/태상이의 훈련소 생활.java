@@ -17,23 +17,25 @@ public class Main {
 		}//for
 		
 		// M개의 줄에 각 조교의 지시가 주어진다.
+		int[] orders = new int[N];
 		int a, b, k; // 각 조교의 지시는 세 개의 정수 a, b, k로 이루어져 있다.
 		while(M-->0) {
 			st = new StringTokenizer(br.readLine());
 			a = Integer.parseInt(st.nextToken()); // a번 칸부터
 			b = Integer.parseInt(st.nextToken()); // b번 칸까지
 			k = Integer.parseInt(st.nextToken()); // k만큼 흙 작업
-            
-			for(int i=a-1; i<b; i++) {
-				H[i] += k;
-			}//for
+			orders[a-1] += k;
+			if(b<N) orders[b] -= k;
 		}//while
 		br.close();
 		
 		StringBuilder sb = new StringBuilder();
-		for(int h : H) {
-            sb.append(h).append(" ");
-        }
+		int prev = 0;
+		for(int i=0; i<N; i++) {
+			prev += orders[i];
+			sb.append(H[i] + prev).append(" ");
+		}
+		
 		System.out.print(sb);
 	}//main
 
