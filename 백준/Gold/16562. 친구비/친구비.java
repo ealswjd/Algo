@@ -1,6 +1,5 @@
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.util.Arrays;
 import java.util.StringTokenizer;
 
 // https://www.acmicpc.net/problem/16562
@@ -40,18 +39,15 @@ public class Main {
 	}//main
 
 	private static boolean friendCheck() {
-		int[] minCost = new int[N+1]; // 최소비용
 		boolean[] parent = new boolean[N+1]; // 대표인지 확인
-		Arrays.fill(minCost, K+1);
 		
 		for(int i=1; i<=N; i++) {
 			parent[union[i]] = true;
-			minCost[union[i]] = Math.min(minCost[union[i]], cost[i]); // 최소비용 갱신
 		}//for				
 		
 		min = 0;
 		for(int i=1; i<=N; i++) {
-			if(parent[i]) min += minCost[i]; // 친구비 갱신
+			if(parent[i]) min += cost[i]; // 친구비 갱신
 			if(min > K) return false; // 친구비 모자라서 친구 못사귐
 		}//for
 
