@@ -14,6 +14,7 @@ public class Main {
 	static StringBuilder winner; // 당선자
 	static Map<Integer, ArrayList<int[]>> voteList; // 투표
 	static Map<Integer, Integer> voteCnt; // 후보자들의 득표 수
+	static boolean[] loser;
 
 	public static void main(String[] args) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -22,6 +23,7 @@ public class Main {
 		voteCnt = new HashMap<>(); // 후보자들의 득표 수
 		voteList = new HashMap<>(); // 투표
 		names = new String[N]; // 후보자들 이름
+		loser = new boolean[N]; // 탈락 여부
 		
 		for(int i=0; i<N; i++) {
 			names[i] = br.readLine();
@@ -65,6 +67,7 @@ public class Main {
 			minCnt = totalCnt; // 가장 적은 득표수
 			loserList = new ArrayList<>(); // 탈락 리스트
 			for(int key : voteCnt.keySet()) {
+				if(loser[key]) continue;
 				pq.offer(new Candidate(key, voteCnt.get(key)));
 				minCnt = Math.min(minCnt, voteCnt.get(key));
 			}//for
@@ -80,6 +83,7 @@ public class Main {
 			if(minCnt == pq.peek().cnt) { 
 				// 득표수가 가장 많은 후보가 가장 적은 득표수랑 동일하다면 모든 후보가 동률임.
 				for(int key : voteCnt.keySet()) {
+					if(loser[key]) continue;
 					winner.append(names[key])
 					.append("\n");					
 				}
@@ -98,7 +102,10 @@ public class Main {
 		while(!pq.isEmpty()) {
 			candidate = pq.poll();
 			// 가장 적은표를 받은 후보라면 탈락자 리스트에 추가해줌.
-			if(candidate.cnt == minCnt) loserList.add(candidate.key);
+			if(candidate.cnt == minCnt) {
+				loserList.add(candidate.key);
+				loser[candidate.key] = true;
+			}
 		}//while
 
 		ArrayList<int[]> tmp;
@@ -107,8 +114,6 @@ public class Main {
 			if(tmp == null) continue;
 			// 다음 순위의 탈락하지 않은 후보에게 표를 준다.
 			passNext(tmp, minCnt);				
-			voteCnt.remove(key); // 후보자 탈락
-			voteList.remove(key);
 		}//for
 		
 	}//voting
@@ -118,7 +123,7 @@ public class Main {
 		
 		for(int i=0, size=tmp.size(); i<size; i++) {
 			for(int num : tmp.get(i)) {
-				if(voteCnt.containsKey(num) && voteCnt.get(num) > minCnt) {
+				if(!loser[num]) {
 					voteCnt.put(num, voteCnt.get(num) + 1);
 					break;
 				}//if
