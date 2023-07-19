@@ -58,8 +58,7 @@ public class Main {
 	private static void startCounting() {
 		PriorityQueue<Candidate> pq; // 높은 득표수순으로 정렬된 후보자들
 		ArrayList<Integer> loserList; // 탈락 리스트
-		int minCnt;
-		Candidate candidate;
+		int minCnt;		
 		
 		while(true) {
 			pq = new PriorityQueue<>(); // 높은 득표수순으로 정렬된 후보자들
@@ -87,33 +86,48 @@ public class Main {
 				return;
 			}//if
 			
-			while(!pq.isEmpty()) {
-				candidate = pq.poll();
-				// 가장 적은표를 받은 후보라면 탈락자 리스트에 추가해줌.
-				if(candidate.cnt == minCnt) loserList.add(candidate.key);
-			}//while
-
-			ArrayList<int[]> tmp;
-			for(int key : loserList) {
-				tmp = voteList.get(key);
-				if(tmp == null) continue;
-				for(int i=0, size=tmp.size(); i<size; i++) {
-					for(int num : tmp.get(i)) {
-						if(voteCnt.containsKey(num) && voteCnt.get(num) > minCnt) {
-							voteCnt.put(num, voteCnt.get(num) + 1);
-							break;
-						}//if
-					}
-				}
-				voteCnt.remove(key); // 후보자 탈락
-				voteList.remove(key);
-			}//for
-			
+			// 가장 약한 후보들을 탈락시키면서 다음 순위의 탈락하지 않은 후보에게 표를 주는 과정
+			voting(minCnt, pq, loserList);		
 		}//while
 		
 	}//startCounting
 	
-	// 흐보자
+	/* 가장 약한 후보들을 탈락시키면서 다음 순위의 탈락하지 않은 후보에게 표를 주는 과정 */
+	private static void voting(int minCnt, PriorityQueue<Candidate> pq, ArrayList<Integer> loserList) {
+		Candidate candidate;
+		while(!pq.isEmpty()) {
+			candidate = pq.poll();
+			// 가장 적은표를 받은 후보라면 탈락자 리스트에 추가해줌.
+			if(candidate.cnt == minCnt) loserList.add(candidate.key);
+		}//while
+
+		ArrayList<int[]> tmp;
+		for(int key : loserList) {
+			tmp = voteList.get(key);
+			if(tmp == null) continue;
+			// 다음 순위의 탈락하지 않은 후보에게 표를 준다.
+			passNext(tmp, minCnt);				
+			voteCnt.remove(key); // 후보자 탈락
+			voteList.remove(key);
+		}//for
+		
+	}//voting
+
+	/* 다음 순위의 탈락하지 않은 후보에게 표를 준다. */
+	private static void passNext(ArrayList<int[]> tmp, int minCnt) {
+		
+		for(int i=0, size=tmp.size(); i<size; i++) {
+			for(int num : tmp.get(i)) {
+				if(voteCnt.containsKey(num) && voteCnt.get(num) > minCnt) {
+					voteCnt.put(num, voteCnt.get(num) + 1);
+					break;
+				}//if
+			}//for num
+		}//for
+		
+	}//passNext
+
+	/* 후보자 */
 	static class Candidate implements Comparable<Candidate>{
 		int key; // 후보자 번호
 		int cnt; // 득표수
