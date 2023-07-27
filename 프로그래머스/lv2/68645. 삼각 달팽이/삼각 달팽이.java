@@ -3,12 +3,11 @@ class Solution {
 	static int[] dc = {0, 1, -1}; // 하 우 상
     
     public int[] solution(int n) {
-		int len = 0; // 배열 크기		        
+		int len = n * (n+1) / 2; // 배열 크기		        
         int[][] tmp = new int[n][]; // 삼각 달팽이 임시 배열
         
         for(int i=0; i<n; i++) {
         	tmp[i] = new int[i+1];
-        	len += i+1;
         }//for
         
         int cnt = 0; // 횟수
