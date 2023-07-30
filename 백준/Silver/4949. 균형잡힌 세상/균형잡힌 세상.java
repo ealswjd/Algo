@@ -16,14 +16,13 @@ public class Main {
 		
 		StringBuilder ans = new StringBuilder();
 		Stack<Character> stack;
-		String line;
-		char c;
+
+		char[] line;
 		out:while(true) {
-			line = br.readLine();
-			if(line.length() == 1 && line.charAt(0) == '.') break;
+			line = br.readLine().toCharArray();
+			if(line.length == 1 && line[0] == '.') break;
 			stack = new Stack<>();
-			for(int i=0, len=line.length(); i<len; i++) {
-				c = line.charAt(i);
+			for(char c : line) {
 				if(!check(c)) continue;
 				if(c == '[' || c == '(') {
 					stack.add(c);
