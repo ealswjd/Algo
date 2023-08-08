@@ -6,27 +6,27 @@ import java.util.StringTokenizer;
 
 // https://www.acmicpc.net/problem/1374
 public class Main {
-	static PriorityQueue<ClassInfo> wait;
+	static PriorityQueue<int[]> wait;
 
 	public static void main(String[] args) throws Exception {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		int N = Integer.parseInt(br.readLine()); // 강의의 개수 N
 		
-		wait = new PriorityQueue<>(new Comparator<ClassInfo>() {
+		wait = new PriorityQueue<>(new Comparator<int[]>() {
 			@Override
-			public int compare(ClassInfo c1, ClassInfo c2) {
-				if(c1.start == c2.start) return c1.end - c2.end;
-				return c1.start - c2.start;
+			public int compare(int[] c1, int[] c2) {
+				if(c1[0] == c2[0]) return c1[1] - c2[1];
+				return c1[0] - c2[0];
 			}
 		});
 		
 		StringTokenizer st;
 		while(N-->0) {
 			st = new StringTokenizer(br.readLine());
-			int num = Integer.parseInt(st.nextToken());   // 강의 번호 
+			st.nextToken();   // 강의 번호 
 			int start = Integer.parseInt(st.nextToken()); // 강의 시작 시간
 			int end = Integer.parseInt(st.nextToken());   // 강의 종료 시간
-			wait.offer(new ClassInfo(num, start, end));
+			wait.offer(new int[] {start, end});
 		}//while
 		br.close();
 		
@@ -36,39 +36,30 @@ public class Main {
 	
 	private static int getRoomCnt() {
 		int cnt = 0;		
-		PriorityQueue<ClassInfo> inUse = new PriorityQueue<>();
-		PriorityQueue<ClassInfo> available = new PriorityQueue<>();
+		PriorityQueue<int[]> inUse = new PriorityQueue<>(new Comparator<int[]>() {
+			@Override
+			public int compare(int[] c1, int[] c2) {
+				return c1[1] - c2[1];
+			}
+		});
+		int available = 0;
 		
-		ClassInfo cur;
+		int[] cur;
 		while(!wait.isEmpty()) {
 			cur = wait.poll();
 			
-			while(!inUse.isEmpty() && cur.start >= inUse.peek().end) {
-				available.offer(inUse.poll());
+			while(!inUse.isEmpty() && cur[0] >= inUse.peek()[1]) {
+				available++;
+				inUse.poll();
 			}//while
 			
-			if(available.isEmpty()) cnt++;
-			else available.poll();
+			if(available > 0) available--;
+			else cnt++;
 
 			inUse.offer(cur);			
 		}//while
 		
 		return cnt;
 	}//getRoomCnt
-
-	static class ClassInfo implements Comparable<ClassInfo> {
-		int num;
-		int start;
-		int end;
-		public ClassInfo(int num, int start, int end) {
-			this.num = num;
-			this.start = start;
-			this.end = end;
-		}
-		@Override
-		public int compareTo(ClassInfo c) {			
-			return this.end - c.end;
-		}
-	}
 
 }//class
