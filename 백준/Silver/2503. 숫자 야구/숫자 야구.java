@@ -28,8 +28,7 @@ public class Main {
 	}//main
 	
 	private static int getCnt() {
-		int cnt = 0;
-		
+		int cnt = 0;		
 		char[] num;
 		for(int n=123; n<=987; n++) {
 			num = getNumArr(n);
@@ -46,7 +45,7 @@ public class Main {
 		int second = n / 10;
 		int third = n % 10;
 		
-        if(first == 0 || second == 0 || third == 0) return null;
+		if(first == 0 || second == 0 || third == 0) return null;
 		if(first == second || first == third || second == third) return null;
 		
 		char[] numArr = new char[3];
@@ -62,13 +61,13 @@ public class Main {
 		for(Number number : numbers) {
 			s = b = 0;
 			cur = number.number;
-			for(int i=0; i<3; i++) {
-				if(cur[i] == num[i]) s++;
-			}//for i
 			
 			for(int i=0; i<3; i++) {
 				for(int j=0; j<3; j++) {
-					if(i!=j && cur[j] == num[i]) b++;
+					if(cur[j] != num[i]) continue;
+					
+					if(i == j) s++;
+					else b++;
 				}//for j
 			}//for i
 			
