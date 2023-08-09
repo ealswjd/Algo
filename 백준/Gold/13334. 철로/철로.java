@@ -1,5 +1,6 @@
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.util.Comparator;
 import java.util.PriorityQueue;
 import java.util.StringTokenizer;
 
@@ -28,15 +29,20 @@ public class Main {
 	
 	private static void getMax() {
 		max = 0; // 포함되는 사람들의 최대 수
-		PriorityQueue<Integer> range = new PriorityQueue<>(); // 범위 해당 
+		PriorityQueue<Position> range = new PriorityQueue<>(new Comparator<Position>() {
+			@Override
+			public int compare(Position a, Position b) {
+				return a.start - b.start;
+			}
+		}); 
 
 		Position cur;
 		while(!pq.isEmpty()) {
 			cur = pq.poll(); // 현재 위치
 			if(cur.len > L) continue; // 철로 길이 넘어가면 안됨 
-			range.offer(cur.start); 
+			range.offer(cur); 
 			
-			while(!range.isEmpty() && range.peek() < cur.end - L) {
+			while(!range.isEmpty() && range.peek().start < cur.end - L) {
 				range.poll(); // 범위 벗어나면 제거
 			}//while
 			
