@@ -1,7 +1,6 @@
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.Stack;
 
 // https://www.acmicpc.net/problem/9519
 public class Main {
@@ -36,30 +35,24 @@ public class Main {
 	private static void mixWord(ArrayList<char[]> orderList) {
 		char[] mix = new char[len];
 		copyArray(mix, word);	
-		Stack<Character> back = new Stack<>();
 		
 		int half = len / 2;
-		int idx;
+		int start, end;
 		while(true) {
 			char[] tmp = new char[len];
-			idx = 0;
+			start = 0; end = len-1;
 			for(int i=0, b=0; i<len; i++) {
 				if(b < half && i%2==1) {
-					back.add(mix[i]);
+					tmp[end--] = mix[i];
 					b++;
 				}else {
-					tmp[idx++] = mix[i];
+					tmp[start++] = mix[i];
 				}				
 			}//for
-			
-			while(!back.isEmpty()) {
-				tmp[idx++] = back.pop();
-			}//while
-			
+
 			if(sameWord(tmp)) break;
-            
 			orderList.add(tmp);			
-			copyArray(mix, tmp);			
+			copyArray(mix, tmp);		
 		}//while
 		
 	}//mixWord
