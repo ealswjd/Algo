@@ -12,6 +12,7 @@ public class Main {
 	static int[] dr = {-1, 0, 1, 0};
 	static int[] dc = {0, 1, 0, -1};
 	static final int INF = 987654321;
+    static String dir = "URDL";
 
 	public static void main(String[] args) throws Exception {
 		init();
@@ -31,23 +32,13 @@ public class Main {
 		for(int i=0; i<N; i++) {
 			char[] tmp = br.readLine().toCharArray();
 			for(int j=0; j<M; j++) {
-				map[i][j] = getIndex(tmp[j]);
+				map[i][j] = dir.indexOf(tmp[j]);
 			}
 			Arrays.fill(dp[i], INF);
 		}//for
 		br.close();
 
 	}//init
-
-	private static int getIndex(char c) {
-		switch (c) {
-		case 'U': return 0; // 상
-		case 'R': return 1; // 우
-		case 'D': return 2; // 하
-		case 'L': return 3; // 좌
-		}
-		return 0;
-	}//getIndex
 
 	private static void escape() {
 		boolean[][] visited = new boolean[N][M];
