@@ -1,5 +1,6 @@
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.util.StringTokenizer;
 
 // https://www.acmicpc.net/problem/11723
 public class Main {
@@ -9,27 +10,27 @@ public class Main {
 		int M = Integer.parseInt(br.readLine());
 
 		StringBuilder ans = new StringBuilder();
+		StringTokenizer st;
 		int x=0, s=0;
-		String[] order;
 		while(M-->0) {
-			order = br.readLine().split(" ");
-			switch (order[0]) {
+			st = new StringTokenizer(br.readLine());
+			switch (st.nextToken()) {
 			case "add":
-				x = Integer.parseInt(order[1]) - 1;
+				x = Integer.parseInt(st.nextToken()) - 1;
 				s |= 1 << x;
 				break;
 			case "remove":
-				x = Integer.parseInt(order[1]) - 1;
+				x = Integer.parseInt(st.nextToken()) - 1;
 				if((s & (1 << x)) == (1 << x)) s ^= 1 << x;	
 				break;
 			case "check":
-				x = Integer.parseInt(order[1]) - 1;
+				x = Integer.parseInt(st.nextToken()) - 1;
 				if((s & (1 << x)) == (1 << x)) ans.append(1);
 				else ans.append(0);
 				ans.append("\n");
 				break;
 			case "toggle":
-				x = Integer.parseInt(order[1]) - 1;
+				x = Integer.parseInt(st.nextToken()) - 1;
 				s ^= 1 << x;
 				break;
 			case "all":
