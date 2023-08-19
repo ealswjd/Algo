@@ -26,7 +26,7 @@ public class Main {
 	}//main
 
 	private static void getVisitorCnt() {
-		Map<Integer, Integer> cntMap = new HashMap<Integer, Integer>();
+		int cnt = 0; // 최대 방문 기간 수
 		int max = 0; // 최대 방문자 수
 		int start = 0;
 		int end = X;
@@ -35,8 +35,9 @@ public class Main {
 		while(end <= N) {
 			sum = visitors[end++] - visitors[start++];
 			if(sum >= max) {
+				if(sum > max) cnt = 1;
+				else cnt++;
 				max = sum;
-				cntMap.put(sum, cntMap.getOrDefault(sum, 0) + 1);
 			}//if
 		}//while
 		
@@ -44,7 +45,7 @@ public class Main {
 		if(max == 0) ans.append("SAD");
 		else {
 			ans.append(max).append("\n");
-			ans.append(cntMap.get(max));
+			ans.append(cnt);
 		}//else
 		
 		System.out.print(ans);
