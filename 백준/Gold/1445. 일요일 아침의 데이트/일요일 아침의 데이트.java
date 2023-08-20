@@ -42,16 +42,22 @@ public class Main {
 		init(visited, min);
 		
 		int[] cur;
-		int r, c, nr, nc, gMin, gCnt;
+		int r, c, nr, nc, gCnt;
 		while(!pq.isEmpty()) {
 			cur = pq.poll();
 			r = cur[0]; // 행
 			c = cur[1]; // 열
-			gMin = cur[2]; // 지나가는 쓰레기의 최소 개수
 			gCnt = cur[3]; // 쓰레기 옆을 지나가는 칸의 개수
 			
 			if(visited[r][c]) continue;
 			visited[r][c] = true;
+			
+			if(r == end[0] && c == end[1]) {
+				StringBuilder ans = new StringBuilder();
+				ans.append(min[end[0]][end[1]][0]+" ").append(min[end[0]][end[1]][1]);
+				System.out.print(ans);
+				break;
+			}
 			
 			for(int i=0; i<4; i++) {
 				nr = r + dr[i];
@@ -73,15 +79,10 @@ public class Main {
 						if(min[nr][nc][1] > ng) min[nr][nc][1] = ng;
 						pq.offer(new int[] {nr, nc, min[nr][nc][0], min[nr][nc][1]});
 					}					
-				}//else
-				
-			}//for
-			
+				}//else				
+			}//for			
 		}//while
-		
-		StringBuilder ans = new StringBuilder();
-		ans.append(min[end[0]][end[1]][0]).append(" ").append(min[end[0]][end[1]][1]);
-		System.out.print(ans);
+
 	}//dijkstra
 
 	private static void init(boolean[][] visited, int[][][] min) {
@@ -101,12 +102,10 @@ public class Main {
 				Arrays.fill(min[i][j], INF);
 			}//for j
 		}//for i
-		
-//		int gCnt = getGarbageCnt(start[0], start[1]);
+
 		pq.offer(new int[] {start[0], start[1], 0, 0});
 		min[start[0]][start[1]][0] = 0;
-		min[start[0]][start[1]][1] = 0;
-		
+		min[start[0]][start[1]][1] = 0;		
 	}//init
 
 	// 옆에 쓰레기 있나 체크
