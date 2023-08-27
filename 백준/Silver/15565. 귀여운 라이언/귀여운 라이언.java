@@ -13,9 +13,10 @@ public class Main {
 		int[] ryan = new int[N+1];
 		
 		st = new StringTokenizer(br.readLine());
-		for(int i=1, j=1, n=0; i<=N; i++) {
+		int rIdx = 1;
+		for(int i=1, n=0; i<=N; i++) {
 			n = Integer.parseInt(st.nextToken());
-			if(n == 1) ryan[j++] = i;
+			if(n == 1) ryan[rIdx++] = i;
 		}//for
 		br.close();
 		
@@ -23,10 +24,8 @@ public class Main {
 		else {
 			int min = N+1;
 			int start = 1, end = K;
-			int max = N - N / K;
 			
-			while(start <= max) {
-				if(ryan[end] == 0) break;
+			while(end < rIdx) {
 				min = Math.min(min, ryan[end++] - ryan[start++]);
 			}//while
 			
