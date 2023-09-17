@@ -53,10 +53,13 @@ public class Main {
 
 	private static int getSum(int mid) {
 		int sum = 0;
-		for(int c : cost) {
-			if(c  <= mid) sum += c;
-			else sum += mid;
-		}//cost
+		for(int i=0; i<N; i++) {
+			if(cost[i] <= mid) sum += cost[i];
+			else {
+				sum += mid * (N-i);
+				break;
+			}//else
+		}//for
 		return sum;
 	}//getSum
 
