@@ -32,7 +32,7 @@ public class Main {
 	}//main
 
 	private static void getCnt(StringBuilder ans) {
-		int sum = 0, cnt = 0;
+		int sum = 0;
 		int start = 0;
 		int end = M-1;
 		int mid = (start+end) / 2;
@@ -41,16 +41,13 @@ public class Main {
 			if(a <= B[0]) continue;
 			start = 0;
 			end = M-1;
-			cnt = 0;
 			while(start <= end) {
 				mid = (start+end) / 2;
-				if(a > B[mid]) {
-					start = mid+1;
-					cnt = start;
-				}else end = mid-1;
+				if(a > B[mid]) start = mid+1;
+				else end = mid-1;
 			}//while
 			
-			sum += cnt;
+			sum += start;
 		}//A
 		
 		ans.append(sum).append("\n");
