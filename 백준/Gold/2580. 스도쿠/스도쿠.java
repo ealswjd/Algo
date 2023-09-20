@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.StringTokenizer;
 
 /**
+ * 문제 이름(난이도) : 스도쿠 (GOL 4)
+ * 시간 : 232 ms
+ * 메모리: 14216 KB
  * 링크 : https://www.acmicpc.net/problem/2580
  * */
 public class Main {
@@ -12,7 +15,6 @@ public class Main {
 	static boolean[][] row, col, square;
 	static ArrayList<int[]> emptyList;
 	static StringBuilder ans;
-	static boolean complete;
 	static int cnt;
 
 	public static void main(String[] args) throws Exception {
@@ -36,12 +38,9 @@ public class Main {
 		
 		cnt = emptyList.size();		
 		fill(0);
-
-		System.out.print(ans);
 	}//main
 
 	private static void fill(int start) {
-		if(complete) return;
 		if(start == cnt) {
 			for(int i=0; i<R; i++) {
 				for(int j=0; j<C; j++) {
@@ -49,15 +48,16 @@ public class Main {
 				}//for j
 				ans.append("\n");
 			}//for i
-			complete = true;
-			return;
+			
+			System.out.print(ans);
+			System.exit(0);
 		}//if
 		
 		int[] cur = emptyList.get(start);
 		int r = cur[0];
 		int c = cur[1];
 		for(int n=1; n<=R; n++) {
-			if(row[r][n] || col[c][n] || square[(r/3)*3+c/3][n] || complete) continue;
+			if(row[r][n] || col[c][n] || square[(r/3)*3+c/3][n]) continue;
 			row[r][n] = col[c][n] = square[(r/3)*3+c/3][n] = true;
 			map[r][c] = n;
 			fill(start+1);
@@ -72,7 +72,6 @@ public class Main {
 		col = new boolean[R][C+1]; // 열 체크
 		square = new boolean[R][C+1]; // 사각형 체크
 		emptyList = new ArrayList<>(); // 빈칸 
-		complete = false; // 스도쿠 완성
 		ans = new StringBuilder(); 
 	}//init
 
