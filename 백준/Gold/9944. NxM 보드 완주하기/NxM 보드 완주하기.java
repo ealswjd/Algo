@@ -1,13 +1,13 @@
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.StringTokenizer;
 
 // https://www.acmicpc.net/problem/9944
 public class Main {
 	static int N, M, min, empty; // 행, 열, 최소 이동 횟수, 빈칸 개수
 	static int[][] map; // 보드
+	static boolean[][] visited;
 	static ArrayList<int[]> emptyList; // 빈칸 리스트
 	static int[] dr = {-1, 1, 0, 0};
 	static int[] dc = {0, 0, -1, 1};
@@ -39,12 +39,12 @@ public class Main {
 			}//for
 			
 			min = Integer.MAX_VALUE;
-			boolean[][] visited = new boolean[N][M]; // 방문체크
+			visited = new boolean[N][M]; // 방문체크
 			for(int i=0; i<empty; i++) {
 				int r = emptyList.get(i)[0];
 				int c = emptyList.get(i)[1];
 				visited[r][c] = true;
-				move(r, c, empty-1, 0, visited);
+				move(r, c, empty-1, 0);
 				visited[r][c] = false;				
 			}
 			
@@ -57,34 +57,34 @@ public class Main {
 		System.out.print(ans);
 	}//main
 
-	private static void move(int r, int c, int emptyCnt, int moveCnt, boolean[][] visited) {
+	private static void move(int r, int c, int emptyCnt, int moveCnt) {
 		if(moveCnt > min) return;
 		if(emptyCnt == 0) {
 			min = Math.min(min, moveCnt);
 			return;
 		}//if
-		
-		boolean[][] tmp = new boolean[N][M];
-		for(int i=0; i<N; i++) tmp[i] = Arrays.copyOf(visited[i], M);
 
 		int cnt;
 		for(int i=0; i<4; i++) {
 			int nr = r;
 			int nc = c;
 			cnt = 0;
-			while(!rangeCheck(nr+dr[i], nc+dc[i]) && !tmp[nr+dr[i]][nc+dc[i]] && map[nr+dr[i]][nc+dc[i]]==0) {
+			while(!rangeCheck(nr+dr[i], nc+dc[i]) && !visited[nr+dr[i]][nc+dc[i]] && map[nr+dr[i]][nc+dc[i]]==0) {
 				nr += dr[i];
 				nc += dc[i];
 				cnt++;
-				tmp[nr][nc] = true;
+				visited[nr][nc] = true;
 			}//while
-			if((r != nr || c != nc) && map[nr][nc] == 0) {
-				tmp[nr][nc] = true;
-				move(nr, nc, emptyCnt-cnt, moveCnt+1, tmp);
-				tmp[nr][nc] = false;
+			
+			if(cnt > 0) {
+				move(nr, nc, emptyCnt-cnt, moveCnt+1);
+				while(!(nr==r && nc==c)) {
+					visited[nr][nc] = false;
+					nr -= dr[i];
+					nc -= dc[i];
+				}//while
 			}//if
 			
-			for(int t=0; t<N; t++) tmp[t] = Arrays.copyOf(visited[t], M);
 		}//for
 	
 	}//move
