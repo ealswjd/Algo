@@ -3,7 +3,6 @@ import java.io.InputStreamReader;
 import java.util.StringTokenizer;
 
 // https://www.acmicpc.net/problem/14503
-// 로봇 청소기가 주어졌을 때, 청소하는 영역의 개수를 구하는 프로그램을 작성
 public class Main {
 	static int N, M, result; // 세로 크기 N과 가로 크기 M
 	static int[][] map; // 로봇 청소기가 있는 장소
@@ -137,8 +136,7 @@ public class Main {
 		return false;
 	}//
 
-	private static boolean rangeCheck(int r, int c) {
-		
+	private static boolean rangeCheck(int r, int c) {		
 		return (r < 0 || r >= N || c < 0 || c >= M );
 	}//
 
@@ -159,12 +157,7 @@ public class Main {
 			this.r = r;
 			this.c = c;
 			this.d = d;
-		}
-		@Override
-		public String toString() {
-			return "Robot [r=" + r + ", c=" + c + ", d=" + d + "]";
-		}		
+		}	
 	}//Robot
 
 }//class
-
