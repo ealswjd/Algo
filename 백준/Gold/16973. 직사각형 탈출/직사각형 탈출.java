@@ -7,7 +7,6 @@ import java.util.StringTokenizer;
 // https://www.acmicpc.net/problem/16973
 public class Main {
 	static int N, M, H, W;
-	static int[][] map;
 	static boolean[][] visited;
 	static int[] dr = {-1, 1, 0, 0};
 	static int[] dc = {0, 0, -1, 1};
@@ -17,13 +16,13 @@ public class Main {
 		StringTokenizer st = new StringTokenizer(br.readLine());
 		N = Integer.parseInt(st.nextToken()); // 격자판 행
 		M = Integer.parseInt(st.nextToken()); // 격자판 열
-		map = new int[N][M]; // 격자판
 		visited = new boolean[N][M]; // 방문체크
 		
 		for(int i=0; i<N; i++) {
 			st = new StringTokenizer(br.readLine());
 			for(int j=0; j<M; j++) {
-				map[i][j] = Integer.parseInt(st.nextToken());
+				int n = Integer.parseInt(st.nextToken());
+				if(n==1) visited[i][j] = true;
 			}//for j
 		}//for i
 		
@@ -38,7 +37,7 @@ public class Main {
 		
 		for(int i=0; i<N; i++) {
 			for(int j=0; j<M; j++) {
-				if(map[i][j] == 1) change(i, j);
+				if(visited[i][j]) change(i, j);
 			}//for j
 		}//for i
 
@@ -75,7 +74,7 @@ public class Main {
 			for(int i=0; i<4; i++) {
 				int nr = r + dr[i];
 				int nc = c + dc[i];
-				if(rangeCheck(nr, nc) || visitCheck(nr, nc)) continue;
+				if(rangeCheck(nr, nc) || visited[nr][nc]) continue;
 				visited[nr][nc] = true;
 				q.offer(new int[] {nr, nc, cnt+1});
 			}//for
@@ -83,10 +82,6 @@ public class Main {
 		
 		return -1;
 	}//move
-
-	private static boolean visitCheck(int r, int c) {		
-		return visited[r][c];
-	}//visitCheck
 
 	private static boolean rangeCheck(int r, int c) {
 		return r<0 || r+H-1>=N || c<0 || c+W-1>=M;
