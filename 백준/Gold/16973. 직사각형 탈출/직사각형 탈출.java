@@ -21,8 +21,7 @@ public class Main {
 		for(int i=0; i<N; i++) {
 			st = new StringTokenizer(br.readLine());
 			for(int j=0; j<M; j++) {
-				int n = Integer.parseInt(st.nextToken());
-				if(n==1) visited[i][j] = true;
+				if(st.nextToken().equals("1")) visited[i][j] = true;
 			}//for j
 		}//for i
 		
