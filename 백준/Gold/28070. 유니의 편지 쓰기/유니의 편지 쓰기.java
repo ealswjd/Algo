@@ -13,20 +13,18 @@ public class Main {
 		cnt = new int[size];
 		
 		StringTokenizer st;
-		int start, end, min=size, max=0;
+		int start, end;
 		for(int i=0; i<N; i++) {
 			st = new StringTokenizer(br.readLine());
 			start = convertToNumber(st.nextToken()); // 입대
 			end = convertToNumber(st.nextToken()); // 전역
-			min = Math.min(min, start);
-			max = Math.max(max, end);
 			cnt[start]++;
 			cnt[end+1]--;
 		}//for
 		
 		int maxCnt = 0;
 		int result = 0;
-		for(int i=min; i<=max; i++) {
+		for(int i=1; i<size; i++) {
 			cnt[i] += cnt[i-1];
 			if(maxCnt < cnt[i]) {
 				maxCnt = cnt[i];
