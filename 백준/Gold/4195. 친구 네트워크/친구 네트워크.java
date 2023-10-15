@@ -9,8 +9,7 @@ public class Main {
 	static int cnt;
 	static HashMap<String, Integer> map;
 	static HashMap<Integer, Integer> cntMap;
-//	static ArrayList<Integer> parent;
-	static int[] parent;
+	static ArrayList<Integer> parent;
 	static StringBuilder ans;
 
 	public static void main(String[] args) throws Exception {
@@ -21,10 +20,8 @@ public class Main {
 		StringTokenizer st;
 		while(T-->0) {
 			int F = Integer.parseInt(br.readLine());
-			parent = new int[F*2];
-			for(int i=1,len=F*2; i<len; i++) {
-				parent[i] = i;
-			}
+			parent = new ArrayList<>();
+			
 			map = new HashMap<>();
 			cntMap = new HashMap<>();
 			
@@ -36,6 +33,10 @@ public class Main {
 				
 				if(!map.containsKey(a)) map.put(a, cnt++);
 				if(!map.containsKey(b)) map.put(b, cnt++);
+				
+				for(int i=parent.size(); i<cnt; i++) {
+					parent.add(i);
+				}//for
 				
 				int key = union(map.get(a), map.get(b));				
 				ans.append(cntMap.get(key)).append("\n");
@@ -50,25 +51,25 @@ public class Main {
 	private static int union(int a, int b) {
 		a = find(a);
 		b = find(b);
-		
-		if(a == b) return a;
 
+		if(a == b) return a;
+		
 		if(a < b) {
-			parent[b] = a;
+			parent.set(b, a);
 			cntMap.put(a, cntMap.getOrDefault(a, 1) + cntMap.getOrDefault(b, 1));
-			cntMap.put(b, cntMap.get(a));
 			return a;
 		}else {
-			parent[a] = b;
+			parent.set(a, b);
 			cntMap.put(b, cntMap.getOrDefault(b, 1) + cntMap.getOrDefault(a, 1));
-			cntMap.put(a, cntMap.get(b));
 			return b;
 		}
 	}//union
 
 	private static int find(int n) {
-		if(parent[n] == n) return n;
-		return parent[n] = find(parent[n]);
+		if(parent.get(n).equals(n)) return n; 
+		
+		parent.set(n, find(parent.get(n))); // 부모 변경******
+		return parent.get(n); 
 	}//find
 
 }//class
