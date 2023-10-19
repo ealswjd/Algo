@@ -8,7 +8,7 @@ import java.util.StringTokenizer;
 public class Main {
 	static int N, M, K, min;
 	static char[][] map;
-	static int[][][] visited;
+	static boolean[][][] visited;
 	static int[] dr = {-1, 1, 0, 0};
 	static int[] dc = {0, 0, -1, 1};
 
@@ -20,7 +20,7 @@ public class Main {
 		K = Integer.parseInt(st.nextToken());
 		
 		map = new char[N][M];
-		visited = new int[K+1][N][M];
+		visited = new boolean[K+1][N][M];
 		for(int i=0; i<N; i++) {
 			map[i] = br.readLine().toCharArray();
 		}//for i
@@ -35,7 +35,7 @@ public class Main {
 	private static void bfs() {
 		Queue<int[]> q = new LinkedList<>();
 		q.offer(new int[] {0, 0, 1, 0});
-		for(int i=0; i<=K; i++) visited[i][0][0] = 1;
+		for(int i=0; i<=K; i++) visited[i][0][0] = true;
 		
 		int[] cur;
 		int r, c, move, kCnt;
@@ -57,13 +57,13 @@ public class Main {
 				if(rangeCheck(nr, nc)) continue;
 				if(map[nr][nc] == '1') { // 벽
 					if(kCnt >= K) continue;
-					if(visited[kCnt+1][nr][nc]==0 || visited[kCnt+1][nr][nc] > move+1) {
-						visited[kCnt+1][nr][nc] = move+1;
+					if(!visited[kCnt+1][nr][nc]) {
+						visited[kCnt+1][nr][nc] = true;
 						q.offer(new int[] {nr, nc, move+1, kCnt+1});												
 					}
 				}else {//빈 공간
-					if(visited[kCnt][nr][nc]==0 || visited[kCnt][nr][nc] > move+1) {
-						visited[kCnt][nr][nc] = move+1;
+					if(!visited[kCnt][nr][nc]) {
+						visited[kCnt][nr][nc] = true;
 						q.offer(new int[] {nr, nc, move+1, kCnt});						
 					}
 				}//else
