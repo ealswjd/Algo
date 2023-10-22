@@ -42,7 +42,7 @@ public class Main {
 	private static int getDay() {
 		Arrays.sort(min);
 		// 방문 못함
-		if(min[N-1] == Integer.MAX_VALUE) return -1;
+		if(min[N-1] > X) return -1;
 		
 		int day=0, num=0, sum=0;
 		while(num<N) {
@@ -59,7 +59,7 @@ public class Main {
 		pq.offer(new Node(S, 0));
 		boolean[] visited = new boolean[N];
 		min = new int[N];
-		Arrays.fill(min, Integer.MAX_VALUE);
+		Arrays.fill(min, X+1);
 		min[S] = 0;
 		
 		Node cur;
