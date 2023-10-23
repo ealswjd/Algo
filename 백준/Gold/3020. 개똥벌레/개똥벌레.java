@@ -45,16 +45,15 @@ public class Main {
 	private static void getResult() {
 		Arrays.sort(cnts);
 		int min = cnts[0];
-		int start=0, end=H, mid = (start+end)/H;
+		int start=0, end=H, mid = (start+end)/2;
 		
 		while(start<=end) {
 			mid = (start+end)/2;
 			if(cnts[mid] > min) end = mid-1;
 			else if(cnts[mid] <= min) start = mid+1;
-		}//while		
+		}//while				
 		
-		if(cnts[mid] == min) mid++;
-		
+		if(cnts[mid]==min) mid++;
 		StringBuilder ans = new StringBuilder();
 		ans.append(min).append(" ").append(mid);
 		System.out.print(ans);
