@@ -3,7 +3,9 @@ import java.io.InputStreamReader;
 import java.util.PriorityQueue;
 import java.util.StringTokenizer;
 
-// https://www.acmicpc.net/problem/1911
+/**
+ * 링크 : https://www.acmicpc.net/problem/1911
+ * */
 public class Main {
 	static int N, L;
 	static PriorityQueue<Position> pq;
@@ -19,7 +21,7 @@ public class Main {
 			st = new StringTokenizer(br.readLine());
 			int start = Integer.parseInt(st.nextToken()); // 웅덩이 시작 위치
 			int end = Integer.parseInt(st.nextToken()); // 웅덩이 끝 위치
-			pq.offer(new Position(start, end));
+			pq.offer(new Position(start, end)); // 시작 위치 기준 오름차순 정렬
 		}//for
 		br.close();
 		
@@ -33,27 +35,27 @@ public class Main {
 		
 		Position cur;
 		while(!pq.isEmpty()) {
-			cur = pq.poll();
-			if(cur.end <= end) continue;
-			else if(cur.start<=end) start = end+1;
-			else if(cur.start > end) start = cur.start;
+			cur = pq.poll(); // 현재 위치
+			if(cur.end <= end) continue; // 끝 위치가 이전 끝 위치랑 겹치면 이미 널빤지 있는 상태
+			else if(cur.start<=end) start = end+1; // 시작 위치가 이전 끝 위치보다 작으면 이전 끝 위치 다음부터 시작하기
+			else if(cur.start > end) start = cur.start; // 시작 위치가 이전 끝 위치보다 크면 새로 시작.
 			
-			len = cur.end - start;
+			len = cur.end - start; // 웅덩이 길이
 			if(len <= 0) continue;
 			
-			if(len <= L) cnt = 1;
-			else cnt = len%L==0 ? len/L : len/L+1;
+			if(len <= L) cnt = 1; // 웅덩이 길이가 널빤지 길이보다 짧으면 한 개만 깔기
+			else cnt = len%L==0 ? len/L : len/L+1; // 더 크다면 필요한 널빤지 개수 구하기
 			
-			sum += cnt;
-			end = L*cnt + start - 1;
+			sum += cnt; // 필요한 개수에 더해주기
+			end = L*cnt + start - 1; // 끝 위치 갱신 (널빤지 개수 * 널빤지 길이 + 시작 위치 - 1)
 		}//while
 		
 		return sum;
 	}//getCnt
 
 	static class Position implements Comparable<Position> {
-		int start;
-		int end;
+		int start; // 시작 위치
+		int end; // 끝 위치
 		public Position(int start, int end) {
 			this.start = start;
 			this.end = end;
