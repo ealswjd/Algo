@@ -22,7 +22,6 @@ public class Main {
 		}//for
 		
 		dfs(0, 0, 0, 10000001, 0);
-
 		System.out.print(result);
 	}//main
 
@@ -32,7 +31,9 @@ public class Main {
 			return;
 		}//if
 		
-		dfs(cur+1, cnt+1, sum+numbers[cur], Math.min(min, numbers[cur]), Math.max(max, numbers[cur]));				
+		// 문제 선택
+		dfs(cur+1, cnt+1, sum+numbers[cur], Math.min(min, numbers[cur]), Math.max(max, numbers[cur]));	
+		// 문제 선택 X
 		dfs(cur+1, cnt, sum, min, max);					
 	}//dfs
 
