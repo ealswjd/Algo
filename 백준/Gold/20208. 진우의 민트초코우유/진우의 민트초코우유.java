@@ -10,8 +10,6 @@ public class Main {
 	static boolean[][] visited;
 	static ArrayList<int[]> mintList;
 	static int[][] map;
-	static int[] dr = {-1, 1, 0, 0};
-	static int[] dc = {0, 0, -1, 1};
 
 	public static void main(String[] args) throws Exception {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -23,7 +21,7 @@ public class Main {
 		jinwoo = new int[2];
 		mintList = new ArrayList<>();
 		
-		// 진우의 집은 1, 민트초코우유는 2로 주어지며 빈 땅은 0
+		// 진우의 집은 1, 민트초코우유는 2, 빈 땅은 0
 		map = new int[N][N];
 		for(int i=0; i<N; i++) {
 			st = new StringTokenizer(br.readLine());
@@ -50,10 +48,9 @@ public class Main {
 	}//main
 
 	private static void dfs(int r, int c, int h, int cnt) {
-		if(h==0) return;
 		if(rangeCheck(r, c, jinwoo[0], jinwoo[1]) <= h) {
 			max = Math.max(max, cnt);			
-		}
+		}//if
 		
 		int nr, nc;
 		for(int[] next : mintList) {
