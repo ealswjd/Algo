@@ -5,7 +5,7 @@ import java.util.StringTokenizer;
 
 // https://www.acmicpc.net/problem/7579
 public class Main {
-	static final int MEMORY = 10000000;
+	static final int MEMORY=0, COST=1;
 	static int N, M;
 	static int[][] apps;
 	static int[] dp;
@@ -16,44 +16,38 @@ public class Main {
 		N = Integer.parseInt(st.nextToken()); // 앱 개수
 		M = Integer.parseInt(st.nextToken()); // 필요한 메모리
 		apps = new int[N][2];
-				
-		for(int i=0; i<2; i++) {
-			input(i, new StringTokenizer(br.readLine()));
+		
+		st = new StringTokenizer(br.readLine());
+		for(int i=0; i<N; i++) {
+			apps[i][MEMORY] = Integer.parseInt(st.nextToken());
+		}//for
+		
+		int total = 0;
+		st = new StringTokenizer(br.readLine());
+		for(int i=0; i<N; i++) {
+			apps[i][COST] = Integer.parseInt(st.nextToken());
+			total += apps[i][COST];
 		}//for
 		br.close();
 		
-		dp = new int[MEMORY+1];
-		Arrays.fill(dp, -1);
+		dp = new int[total+1];
 		
-		System.out.print(getMinCost());
+		System.out.print(getMinCost(total));
 	}//main
 
-	private static int getMinCost() {
+	private static int getMinCost(int total) {
 		
-		for(int a=0; a<N; a++) {
-			int cost = apps[a][1];
-			for(int c=MEMORY; c>=cost; c--) {
-				if(dp[c-cost] == -1) continue;
-				if(dp[c-cost] + apps[a][0] > dp[c]) {
-					dp[c] = dp[c-cost] + apps[a][0];
-				}
-			}//for c
-			if(dp[cost] < apps[a][0]) dp[cost] = apps[a][0];
-		}//for a
-
-		for(int cost=0; cost<=MEMORY; cost++) {
-			if(dp[cost] >= M) {
-				return cost;
-			}//if
-		}//for
+		for(int i=0; i<N; i++) {
+			for(int j=total; j>=apps[i][COST]; j--) {
+				dp[j] = Math.max(dp[j], apps[i][MEMORY] + dp[j - apps[i][COST]]);
+			}//for j
+		}//for i
+		
+		for(int cost=0; cost<=total; cost++) {
+			if(dp[cost] >= M) return cost;
+		}//for 
 		
 		return 0;
 	}//getMinCost
-
-	private static void input(int idx, StringTokenizer st) {
-		for(int i=0; i<N; i++) {
-			apps[i][idx] = Integer.parseInt(st.nextToken());
-		}//for		
-	}//input
 
 }//class
