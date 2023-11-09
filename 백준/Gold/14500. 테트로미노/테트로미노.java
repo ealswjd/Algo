@@ -37,21 +37,22 @@ public class Main {
 		System.out.print(max);
 	}//main
 
+	// 나머지 확인
 	private static void otherCheck(int r, int c) {
 
-		if(r-1 >= 0 && c-1 >= 0 && c+1 < M) {
+		if(r-1 >= 0 && c-1 >= 0 && c+1 < M) { // ㅗ
 			max = Math.max(max, map[r][c-1] + map[r][c] + map[r][c+1] + map[r-1][c]) ;
 		}
 		
-		if(r+1 < N && c-1 >= 0 && c+1 < M) {
+		if(r+1 < N && c-1 >= 0 && c+1 < M) { // ㅜ
 			max = Math.max(max, map[r][c-1] + map[r][c] + map[r+1][c] + map[r][c+1]) ;
 		}
 		
-		if(r-1 >= 0 && r+1 < N && c+1 < M) {
+		if(r-1 >= 0 && r+1 < N && c+1 < M) { // ㅏ
 			max = Math.max(max, map[r-1][c] + map[r][c] + map[r][c+1] + map[r+1][c]) ;
 		}
 		
-		if(r-1 >= 0 && r+1 < N && c-1 >= 0) {
+		if(r-1 >= 0 && r+1 < N && c-1 >= 0) { // ㅓ
 			max = Math.max(max, map[r-1][c] + map[r][c] + map[r][c-1] + map[r+1][c]) ;
 		}		
 		
