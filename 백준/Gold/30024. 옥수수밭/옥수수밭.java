@@ -1,5 +1,6 @@
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.util.Comparator;
 import java.util.PriorityQueue;
 import java.util.StringTokenizer;
 
@@ -19,7 +20,12 @@ public class Main {
 		C = Integer.parseInt(st.nextToken()); // 옥수수밭 열
 		map = new int[R][C]; // 옥수수밭
 		visited = new boolean[R][C];
-		pq = new PriorityQueue<>((int[] arr1, int[] arr2) -> arr2[0] - arr1[0]);
+		pq = new PriorityQueue<>(new Comparator<int[]>() {
+			@Override
+			public int compare(int[] o1, int[] o2) {
+				return o2[0] - o1[0];
+			}
+		});
 		
 		for(int i=0; i<R; i++) {
 			st = new StringTokenizer(br.readLine());
