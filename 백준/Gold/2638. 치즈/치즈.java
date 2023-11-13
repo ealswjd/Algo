@@ -26,15 +26,12 @@ public class Main {
 			st = new StringTokenizer(br.readLine());
 			for(int j=0; j<M; j++) {
 				map[i][j] = Integer.parseInt(st.nextToken());
-				if(map[i][j] == 1) {
-					cheeseCnt++;
-				}//if
+				if(map[i][j] == 1) cheeseCnt++; // 치즈면 개수 증가
 			}//for j
 		}//for i
 		br.close();
 		
 		int time = getTime(cheeseCnt);		
-		
 		System.out.print(time);
 	}//main
 	
@@ -47,35 +44,34 @@ public class Main {
 		int r, c, nr, nc, time=0, total=0;
 		while(!q.isEmpty()) {
 			int size = q.size();
-			total++;
+			total++; // 치즈가 전부 녹아 없어지는 시간
 			while(size-->0) {
 				cur = q.poll();
-				r = cur.r;
-				c = cur.c;
-				time = cur.time;
+				r = cur.r; // 행
+				c = cur.c; // 열
+				time = cur.time; // 시간
 				
 				for(int i=0; i<4; i++) {
 					nr = r + dr[i];
 					nc = c + dc[i];
 					if(rangeCheck(nr, nc) || visited[nr][nc]) continue;
-					if(map[nr][nc]==0) {
-						dfs(q, nr, nc, time);
-					}else {
+					
+					if(map[nr][nc]==0) dfs(q, nr, nc, time); // 공기
+					else { // 치즈
 						Position cheese = new Position(nr, nc, time+1);
 						cheeseMap.put(cheese, cheeseMap.getOrDefault(cheese, 0) + 1);
-						if(cheeseMap.get(cheese) > 1) {
-							total = Math.max(total, cheese.time);
-							dfs(q, cheese.r, cheese.c, cheese.time);
-							cheeseCnt--;							
-						}
-					}
+						if(cheeseMap.get(cheese) > 1) { // 2변 이상 
+							dfs(q, cheese.r, cheese.c, cheese.time); // 공기 확보
+							cheeseCnt--; // 치즈 개수 감소						
+						}//if
+					}//else
 				}//for				
 			}//while
 
-			if(cheeseCnt == 0) break;
+			if(cheeseCnt == 0) break; // 치즈 다 녹으면 그만
 		}//while
 		
-		return total;
+		return total; 
 	}//getTime
 
 	private static void dfs(Queue<Position> q, int r, int c, int time) {
@@ -93,6 +89,7 @@ public class Main {
 		
 	}//dfs
 
+	// 범위 체크
 	private static boolean rangeCheck(int r, int c) {
 		return r<0 || r>=N || c<0 || c>=M;
 	}//rangeCheck
