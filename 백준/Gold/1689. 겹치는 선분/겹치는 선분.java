@@ -1,18 +1,17 @@
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.util.Arrays;
 import java.util.PriorityQueue;
 import java.util.StringTokenizer;
 
 // https://www.acmicpc.net/problem/1689
 public class Main {
 	static int N;
-	static Line[] lines;
+	static PriorityQueue<Line> lines;
 
 	public static void main(String[] args) throws Exception {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		N = Integer.parseInt(br.readLine()); // 선분 개수		
-		lines = new Line[N];
+		lines = new PriorityQueue<>();
 		
 		StringTokenizer st;
 		int start, end;
@@ -20,11 +19,10 @@ public class Main {
 			st = new StringTokenizer(br.readLine());
 			start = Integer.parseInt(st.nextToken());
 			end = Integer.parseInt(st.nextToken());
-			lines[i] = new Line(start, end);
+			lines.offer(new Line(start, end));
 		}//for
 		br.close();
-		
-		Arrays.sort(lines);
+
 		int max = getMax();
 		System.out.print(max);
 	}//main
@@ -33,7 +31,9 @@ public class Main {
 		int max = 0; // 최대로 많이 겹치는 선분들의 개수
 		PriorityQueue<Integer> range = new PriorityQueue<>(); // 겹치는 선분들
 		
-		for(Line cur : lines) {
+		Line cur;
+		while(!lines.isEmpty()) {
+			cur = lines.poll(); // 현재 선
 			range.offer(cur.end);						
 			
 			while(!range.isEmpty() && range.peek() <= cur.start) {
@@ -41,7 +41,7 @@ public class Main {
 			}//while
 			
 			max = Math.max(max, range.size());
-		}//for		
+		}//while		
 		
 		return max;
 	}//getMax
