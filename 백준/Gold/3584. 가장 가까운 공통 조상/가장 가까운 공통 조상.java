@@ -45,7 +45,7 @@ public class Main {
 	}//main
 
 	private static int dfs(int n) {
-		if(visited[n] || parent[n] == n) return n;
+		if(visited[n] || parent[n] == 0) return n;
 		visited[n] = true;
 
 		return dfs(parent[n]);
@@ -53,10 +53,7 @@ public class Main {
 
 	private static void init() {
 		parent = new int[N+1];
-		visited = new boolean[N+1];
-		for(int i=1; i<=N; i++) {
-			parent[i] = i;
-		}//for		
+		visited = new boolean[N+1];	
 	}//init
 
 }//class
