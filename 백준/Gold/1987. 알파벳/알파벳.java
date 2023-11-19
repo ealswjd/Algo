@@ -30,15 +30,14 @@ public class Main {
 
 	private static void getCnt(int r, int c, int cnt) {
 		int nr, nc;
+		max = Math.max(max, cnt); // 최대 개수 갱신
+		
 		for(int i=0; i<4; i++) {
 			nr = r + dr[i];
 			nc = c + dc[i];
 			
 			if(rangeCheck(nr, nc)) continue; // 범위 벗어남
-			if(visited[map[nr][nc]-'A']) { // 알파벳 사용한 적 있음
-				max = Math.max(max, cnt); // 최대 개수 갱신
-				continue;
-			}//if
+			if(visited[map[nr][nc]-'A']) continue;
 			
 			visited[map[nr][nc]-'A'] = true; // 알파벳 사용 처리
 			getCnt(nr, nc, cnt+1);
