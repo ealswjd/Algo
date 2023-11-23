@@ -6,6 +6,9 @@ import java.util.List;
 import java.util.PriorityQueue;
 import java.util.StringTokenizer;
 
+/**
+ * 링크 : https://www.acmicpc.net/problem/1446
+ * */
 public class Main {
 	static final int INF = 987654321;
 	static int D;
@@ -23,14 +26,15 @@ public class Main {
 			list.add(new ArrayList<>());
 		}//for
 
-		int from, to, cost;
+		int from, to, dist;
 		while(N-->0) {
 			st = new StringTokenizer(br.readLine());
-			from = Integer.parseInt(st.nextToken());
-			to = Integer.parseInt(st.nextToken());
-			cost = Integer.parseInt(st.nextToken());
-			if(from > D || to > D) continue;
-			list.get(from).add(new Position(to, cost));
+			from = Integer.parseInt(st.nextToken()); // 지름길 시작 위치
+			to = Integer.parseInt(st.nextToken()); // 지름길 도착 위치
+			dist = Integer.parseInt(st.nextToken()); // 지름길 길이
+			// 시작위치나 도착 위치가 목적지보다 크거나, 지름길이 아닌 경우 넘김
+			if(from > D || to > D || to-from <= dist) continue; 
+			list.get(from).add(new Position(to, dist)); // 모든 지름길은 일방통행
 		}//while
 		br.close();
 		
@@ -46,24 +50,27 @@ public class Main {
 		boolean[] visited = new boolean[D+1];
 		
 		Position cur;
-		int to, cost;
+		int to, dist;
 		while(!pq.isEmpty()) {
 			cur = pq.poll();
-			to = cur.to;
-			cost = cur.cost;
+			to = cur.to; // 도착 위치
+			dist = cur.dist; // 거리 길이
 			
 			if(visited[to]) continue;
 			visited[to] = true;
-			if(to == D) break;
 			
-			if(to+1 <= D && min[to+1] > cost + 1) {
-				min[to+1] = cost + 1;
+			if(to == D) break; // 목적지 도착
+			
+			// 1씩 이동
+			if(to+1 <= D && min[to+1] > dist + 1) {
+				min[to+1] = dist + 1;
 				pq.offer(new Position(to+1, min[to+1]));
 			}//if
 			
+			// 지름길 이동
 			for(Position next : list.get(to)) {
-				if(min[next.to] > cost + next.cost || min[next.to] > cost + next.to - to) {
-					min[next.to] = Math.min(cost + next.cost, cost + next.to - to);
+				if(min[next.to] > dist + next.dist) {
+					min[next.to] = dist + next.dist;
 					pq.offer(new Position(next.to, min[next.to]));
 				}//if			
 			}//for
@@ -74,14 +81,14 @@ public class Main {
 
 	static class Position implements Comparable<Position>{
 		int to;
-		int cost;
-		public Position(int to, int cost) {
+		int dist;
+		public Position(int to, int dist) {
 			this.to = to;
-			this.cost = cost;
+			this.dist = dist;
 		}
 		@Override
 		public int compareTo(Position pos) {
-			return this.cost - pos.cost;
+			return this.dist - pos.dist;
 		}
 	}//Position
 
