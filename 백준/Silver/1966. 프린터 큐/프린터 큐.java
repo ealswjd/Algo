@@ -1,14 +1,14 @@
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.util.Arrays;
 import java.util.LinkedList;
-import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.StringTokenizer;
 
 // https://www.acmicpc.net/problem/1966
 public class Main {
 	static int N, M;
-	static PriorityQueue<Document> pq;
+	static int[] arr;
 	static Queue<Document> printer;
 
 	public static void main(String[] args) throws Exception {
@@ -22,15 +22,17 @@ public class Main {
 			N = Integer.parseInt(st.nextToken()); // 문서의 개수
 			M = Integer.parseInt(st.nextToken()); // 순서가 궁금한 문서
 			
-			pq = new PriorityQueue<>();
+			arr = new int[N];
 			printer = new LinkedList<>();
+			
 			st = new StringTokenizer(br.readLine());
 			for(int idx=0; idx<N; idx++) {
 				int num = Integer.parseInt(st.nextToken());
-				pq.offer(new Document(idx, num));
+				arr[idx] = num;
 				printer.offer(new Document(idx, num));
 			}//for
 			
+			Arrays.sort(arr);
 			ans.append(getOrder()).append("\n");
 		}//while
 		br.close();
@@ -40,15 +42,16 @@ public class Main {
 	
 	private static int getOrder() {
 		int order = 1;
+		int idx = N-1;
 		
 		Document cur;
 		while(!printer.isEmpty()) {
 			cur = printer.poll();
 			
-			if(pq.peek().num > cur.num) printer.offer(cur);				
+			if(arr[idx] > cur.num) printer.offer(cur);				
 			else {
 				if(cur.idx == M) return order;
-				pq.poll();
+				idx--;
 				order++;
 			}//else
 			
