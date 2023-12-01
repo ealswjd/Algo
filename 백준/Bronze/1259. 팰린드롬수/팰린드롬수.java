@@ -17,10 +17,8 @@ public class Main {
 			N = number.length;
 			p = new boolean[N][N];
 			
-			if(isPalindrome(0, N-1)) ans.append("yes");
-			else ans.append("no");
-			
-			ans.append("\n");
+			if(isPalindrome(0, N-1)) ans.append("yes\n");
+			else ans.append("no\n");
 		}//while
 
 		System.out.print(ans);
