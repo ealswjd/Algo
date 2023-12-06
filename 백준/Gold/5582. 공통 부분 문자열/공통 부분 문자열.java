@@ -23,8 +23,10 @@ public class Main {
 		for(int r=1; r<=a; r++) {
 			for(int c=1; c<=b; c++) {
 				// 두 문자가 같은 경우 이전 문자열들의 길이 + 1
-				if(A[r-1] == B[c-1]) dp[r][c] = dp[r-1][c-1] + 1;
-				max = Math.max(max, dp[r][c]);
+				if(A[r-1] == B[c-1]) {
+                    dp[r][c] = dp[r-1][c-1] + 1;
+                    max = Math.max(max, dp[r][c]);
+                }				
 			}//for c
 		}//for r
 		
