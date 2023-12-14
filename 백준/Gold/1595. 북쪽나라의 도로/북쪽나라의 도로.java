@@ -7,7 +7,7 @@ import java.util.StringTokenizer;
 // https://www.acmicpc.net/problem/1595
 public class Main {
 	static final int N = 10_000;
-	static int max;
+	static int result, max;
 	static boolean[] visited;
 	static ArrayList<ArrayList<int[]>> list;
 
@@ -38,23 +38,30 @@ public class Main {
 		if(tmp == -1) System.out.print(0);
 		else {
 			visited = new boolean[N+1];		
-			for(int i=1; i<=N; i++) {
-				dfs(i, 0);	
-			}//for
+			visited[1] = true;
+			dfs(1, 0);	
 			
-			System.out.print(max);			
+			visited = new boolean[N+1];		
+			visited[max] = true;
+			dfs(max, 0);	
+			
+			System.out.print(result);			
 		}
 	}//main
 
 	private static void dfs(int cur, int cost) {
-		visited[cur] = true;
 		
 		for(int[] next : list.get(cur)) {
-			if(visited[next[0]]) max = Math.max(max, cost);		
-			else dfs(next[0], next[1] + cost);				
+			if(visited[next[0]]) continue;
+			int nCost = cost + next[1];
+			visited[next[0]] = true;
+			if(result < nCost) {
+				max = next[0];
+				result = nCost;
+			}
+			dfs(next[0], nCost);
 		}//for
 		
-		visited[cur] = false;
 	}//dfs
 
 }//class
