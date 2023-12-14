@@ -1,66 +1,69 @@
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Queue;
+import java.util.StringTokenizer;
 
 public class Main {
-    static int n, m;
-    static computer[] list;
-    static boolean[] checked;
-    static int[] result;
-    static public class computer {
-        int idx; ArrayList<computer> node;
-        public computer(int idx) {
-            this.idx = idx;
-            this.node = new ArrayList<>();
-        }
-    }
-    public static void main(String[] args) throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
-        String[] inputs = br.readLine().split(" ");
-        n = Integer.parseInt(inputs[0]);
-        m = Integer.parseInt(inputs[1]);
 
-        list = new computer[n+1];
-        for (int i = 0; i <= n; i++) {
-            list[i] = new computer(i);
-        }
+   public static void main(String[] args) throws Exception {
+      BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+      StringBuilder sb = new StringBuilder();
+      StringTokenizer st = new StringTokenizer(br.readLine());
+      int N = Integer.parseInt(st.nextToken());
+      int M = Integer.parseInt(st.nextToken());
+      ArrayList<ArrayList<Integer>> graph = new ArrayList<ArrayList<Integer>>();
+      for (int i = 0; i <= N; i++)
+         graph.add(new ArrayList<Integer>());
+      for (int i = 0; i < M; i++) {
+         st = new StringTokenizer(br.readLine());
+         int A = Integer.parseInt(st.nextToken());
+         int B = Integer.parseInt(st.nextToken());
+         graph.get(B).add(A);
+      }
 
-        for (int i = 0; i < m; i++) {
-            inputs = br.readLine().split(" ");
-            int a = Integer.parseInt(inputs[0]);
-            int b = Integer.parseInt(inputs[1]);
+      int[] hacking = new int[N + 1];
+      int max = 0;
+      Queue<Integer> que = new ArrayDeque<Integer>();
+      boolean[][] visited = new boolean[N + 1][N + 1];
 
-            list[b].node.add(list[a]);
-        }
+      for (int i = 1; i <= N; i++) {
+         que.offer(i);
 
-        result = new int[n+1];
-        for (int i = 1; i <= n; i++) {
-            checked = new boolean[n+1];
-            checked[i] = true;
-            dfs(i, i);
-        }
+         while (!que.isEmpty()) {
+            int cur = que.poll();
+            if (visited[i][cur]) continue;
+            visited[i][cur] = true;
+            hacking[i]++;
 
-        int max = 0;
-        for (int i = 1; i <= n; i++) {
-            max = Math.max(max, result[i]);
-        }
-
-        for (int i = 1; i <= n; i++) {
-            if (result[i] == max) bw.write(i + " ");
-        }
-
-        bw.flush();
-        bw.close();
-        br.close();
-    }
-
-    private static void dfs(int start, int now) {
-        for (computer next : list[now].node) {
-            if (!checked[next.idx]) {
-                checked[next.idx] = true;
-                dfs(start, next.idx);
-                result[start]++;
+            int size = graph.get(cur).size();
+            for (int j = 0; j < size; j++) {
+               if (visited[i][graph.get(cur).get(j)])
+                  continue;
+               if (graph.get(cur).get(j) < i) { 
+                  for (int k = 1; k <= N; k++) {
+                     if (visited[i][k])
+                        continue;
+                     if (visited[graph.get(cur).get(j)][k]) {
+                        visited[i][k] = true;
+                        hacking[i]++;
+                     }
+                  }
+               } else { 
+                  que.offer(graph.get(cur).get(j));
+               }
             }
-        }
-    }
+         }
+         max = hacking[i] > max ? hacking[i] : max;
+      }
+
+      for (int i = 1; i <= N; i++) {
+         if (max == hacking[i])
+            sb.append(i).append(" ");
+      }
+      System.out.println(sb);
+   }
+
 }
