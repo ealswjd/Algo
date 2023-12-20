@@ -54,7 +54,7 @@ public class Main {
 			for(int i=0; i<4; i++) {
 				nr = r + dr[i];
 				nc = c + dc[i];
-				if(check(nr, nc) || visited[nr][nc] || f <= 0) continue;
+				if(f <= 0 || check(nr, nc) || visited[nr][nc]) continue;
 				if(map[nr][nc] > map[r][c] && map[nr][nc] - map[r][c] > f) continue;					
 
 				visited[nr][nc] = true;
