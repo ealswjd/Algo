@@ -11,7 +11,7 @@ public class Main {
 	static final char EMPTY='.';
 	static final int[] dr = {-1, 1, 0, 0};
 	static final int[] dc = {0, 0, -1, 1};
-	static int N, M, d, or, oc;
+	static int N, M;
 	static char[][] map;
 
 	public static void main(String[] args) throws Exception{
@@ -20,7 +20,6 @@ public class Main {
 		N = Integer.parseInt(st.nextToken());
 		M = Integer.parseInt(st.nextToken());
 		map = new char[N][M];
-//		dir = new int[4][11];
 		
 		int[] r, b;
 		r = new int[2];
@@ -68,6 +67,8 @@ public class Main {
 	}//main
 
 	private static Position bfs(int[] r, int[] b) {
+		boolean[][][][] visited = new boolean[N][M][N][M];
+		visited[r[0]][r[1]][b[0]][b[1]] = true;
 		Queue<Position> q = new LinkedList<>();
 		for(int dir=0; dir<4; dir++) {
 			q.offer(new Position(r[0], r[1], b[0], b[1], 0, dir, new int[11]));
@@ -77,15 +78,16 @@ public class Main {
 		while(!q.isEmpty()) {
 			cur = q.poll();
 		
-			if(cur.redR == -1 && cur.redC== -1) {
-				d = cur.dir;
-				return cur;
-			}
+			if(cur.redR == -1 && cur.redC== -1) return cur;
 			if(cur.cnt == 10 || cur.blueR == -1) continue;
 			
 			for(int i=0; i<4; i++) {
 				Position next = getNext(cur, i);
 				if(next == null) continue;
+				if(next.redR!=-1 && next.redC!=-1 && next.blueR!=-1 && next.blueC!=-1) {
+					if(visited[next.redR][next.redC][next.blueR][next.blueC]) continue;
+					visited[next.redR][next.redC][next.blueR][next.blueC] = true;
+				}
 				next.order[cur.cnt+1] = i;
 				q.offer(next);
 			}//for
@@ -177,7 +179,7 @@ public class Main {
 			}//while			
 			
 			if(br != -1) map[br][bc] = EMPTY;
-			if(goal > 1) return null;
+			if(goal > 1) return null;		
 			return new Position(rr, rc, br, bc, cur.cnt+1, cur.dir, Arrays.copyOf(cur.order, 11));			
 		}
 
