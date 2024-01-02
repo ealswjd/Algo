@@ -24,26 +24,25 @@ public class Main {
 
 	private static void getBig() {
 		StringBuilder ans = new StringBuilder();
-		Stack<Integer> result = new Stack<>();
-		Stack<Integer> tmp = new Stack<>();
+		int[] result = new int[N];
+		Stack<Integer> stack = new Stack<>();
 		
 		for(int i=N-1; i>=0; i--) {
-			while(!tmp.isEmpty() && tmp.peek() <= A[i]) {
-				tmp.pop();
+			while(!stack.isEmpty() && stack.peek() <= A[i]) {
+				stack.pop();
 			}//while
 			
-			if(tmp.isEmpty()) result.add(-1);
-			else result.add(tmp.peek());
+			if(stack.isEmpty()) result[i] = -1;
+			else result[i] = stack.peek();
 			
-			tmp.add(A[i]);
+			stack.add(A[i]);
 		}//for
 		
-		while(!result.isEmpty()) {
-			ans.append(result.pop()).append(' ');
-		}//while
+		for(int num : result) {
+			ans.append(num).append(' ');
+		}//for
 		
 		System.out.print(ans);
 	}//getBig
-
 
 }//class
