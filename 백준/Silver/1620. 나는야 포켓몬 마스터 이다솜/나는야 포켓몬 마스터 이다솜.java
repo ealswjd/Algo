@@ -25,12 +25,13 @@ public class Main {
 		StringBuilder ans = new StringBuilder();
 		while(M-->0) {
 			String key = br.readLine();
-			try {
-				int num = Integer.parseInt(key);
-				ans.append(number[num]).append('\n');
-			} catch (Exception e) {
-				ans.append(name.get(key)).append('\n');
+			
+			if('1' <= key.charAt(0) && key.charAt(0) <= '9') {
+				ans.append(number[Integer.parseInt(key)]).append('\n');
+			}else {
+				ans.append(name.get(key)).append('\n');				
 			}
+
 		}//while
 
 		System.out.print(ans);
