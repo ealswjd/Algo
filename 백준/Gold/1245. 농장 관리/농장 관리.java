@@ -1,7 +1,7 @@
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.LinkedList;
+import java.util.Queue;
 import java.util.StringTokenizer;
 
 // https://www.acmicpc.net/problem/1245
@@ -11,7 +11,7 @@ public class Main {
 	static int N, M;
 	static int[][] map;
 	static boolean[][] mountain;
-	static List<int[]> list;
+	static Queue<int[]> q;
 	static boolean isMountain;
 
 	public static void main(String[] args) throws Exception{
@@ -30,19 +30,19 @@ public class Main {
 		}//for i
 		br.close();
 		
+		q = new LinkedList<>();
 		int cnt = 0;
 		for(int i=0; i<N; i++) {
 			for(int j=0; j<M; j++) {
 				if(map[i][j] == 0 || mountain[i][j]) continue;
-				list = new ArrayList<>();
 				isMountain = true;
 				dfs(i, j, map[i][j], new boolean[N][M]);
 				if(isMountain) {
 					cnt++;
-					for(int[] pos : list) {
-						mountain[pos[0]][pos[1]] = true;
+					while(!q.isEmpty()) {
+						mountain[q.peek()[0]][q.poll()[1]] = true;
 					}
-				}
+				}else q.clear();
 			}//for j
 		}//for i
 
@@ -51,7 +51,7 @@ public class Main {
 
 	private static void dfs(int r, int c, int n, boolean[][] visited) {
 		if(!isMountain) return;
-		list.add(new int[] {r, c});
+		q.add(new int[] {r, c});
 		visited[r][c] = true;
 		
 		for(int i=0; i<8; i++) {
