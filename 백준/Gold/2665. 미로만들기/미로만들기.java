@@ -26,7 +26,7 @@ public class Main {
 
 	// 미로 만들기
 	private static int makeMaze() {
-		int[][][] min = new int[N][N][1];
+		int[][] min = new int[N][N];
 		boolean[][] visited = new boolean[N][N];
 		init(min);
 		pq.offer(new int[] {0, 0, 0});
@@ -50,14 +50,14 @@ public class Main {
 				if(rangeCheck(nr, nc)) continue;
 				
 				if(map[nr][nc] == '0') { // 0은 검은 방 (벽)
-					if(min[nr][nc][0] > cnt + 1) {
-						min[nr][nc][0] = cnt + 1;
-						pq.offer(new int[] {nr, nc, min[nr][nc][0]});
+					if(min[nr][nc] > cnt + 1) {
+						min[nr][nc] = cnt + 1;
+						pq.offer(new int[] {nr, nc, min[nr][nc]});
 					}
 				}else { // 1은 흰 방 (빈 공간)
-					if(min[nr][nc][0] > cnt) {
-						min[nr][nc][0] = cnt;
-						pq.offer(new int[] {nr, nc, min[nr][nc][0]});
+					if(min[nr][nc] > cnt) {
+						min[nr][nc] = cnt;
+						pq.offer(new int[] {nr, nc, min[nr][nc]});
 					}
 				}
 			}//for
@@ -72,16 +72,14 @@ public class Main {
 	}//rangeCheck
 
 	// 초기화
-	private static void init(int[][][] min) {
+	private static void init(int[][] min) {
 		int INF = 987654321;
 		
 		for(int i=0; i<N; i++) {
-			for(int j=0; j<N; j++) {
-				Arrays.fill(min[i][j], INF);
-			}//for j
+			Arrays.fill(min[i], INF);
 		}//for i
 		
-		min[0][0][0] = 0;
+		min[0][0] = 0;
 		
 		pq = new PriorityQueue<>(new Comparator<int[]>() {
 			@Override
