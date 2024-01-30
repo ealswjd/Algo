@@ -4,7 +4,7 @@ import java.util.StringTokenizer;
 
 // https://www.acmicpc.net/problem/16943
 public class Main {
-	static int N, A, B, result;
+	static int N, A, B, result, start;
 	static boolean[] visited;
 
 	public static void main(String[] args) throws Exception {
@@ -20,6 +20,7 @@ public class Main {
 
 		if(bLen < N) System.out.print(-1);
 		else {
+			start = (int)Math.pow(10, N-1);
 			sol(N, 0);
 			if(result == 0) result = -1;
 			System.out.print(result);			
@@ -32,10 +33,10 @@ public class Main {
 			return;
 		}//if
 		
-		int n = A;
-		for(int i=(int)Math.pow(10, N-1), j=0; j<N; i/=10, j++) {
+		int n, pow = (int)Math.pow(10, cnt-1);
+		for(int i=start, j=0; j<N; i/=10, j++) {
 			if(visited[j]) continue;
-			n = ((A / i) % 10) * (int)Math.pow(10, cnt-1);
+			n = ((A / i) % 10) * pow;
 			visited[j] = true;
 			sol(cnt-1, sum + n);
 			visited[j] = false;
