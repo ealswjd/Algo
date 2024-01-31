@@ -1,6 +1,5 @@
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.util.Arrays;
 import java.util.StringTokenizer;
 
 // https://www.acmicpc.net/problem/20008
@@ -51,27 +50,22 @@ public class Main {
 	}//perm
 
 	private static int getTime() {
-		int idx, len = 100000 + 1;
+		int idx, len = totalTime * ((HP/totalDamage)+1);
 		int[] timeArr = new int[len];
 		
 		for(int i=0; i<N; i++) {
 			idx = order[i];
 			for(int j=i; j<len; j+=skills[idx][C]) {
-				if(j+2 < len) {
-					while(j+2 < len && timeArr[j+1] != 0) j++;
-					timeArr[j+1] += skills[idx][D];
-				}
+				while(j+2 < len && timeArr[j+1] != 0) j++;
+				if(j+1 < len) timeArr[j+1] += skills[idx][D];
 			}
 		}
 		
 		int hp = HP;
 		int time = 0;
-		for(int i=0; i<len; i++) {
-			hp -= timeArr[i];
-			if(hp <= 0) {
-				time = i;
-				break;
-			}
+		for(; time<len; time++) {
+			hp -= timeArr[time];
+			if(hp <= 0) break;
 		}
 		
 		return time;
