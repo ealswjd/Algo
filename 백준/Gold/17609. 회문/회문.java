@@ -14,9 +14,7 @@ public class Main {
 		while(T-->0) {
 			word = br.readLine().toCharArray();
 			cnt = getCnt(0, word.length-1, 0);
-			if(cnt < 2) ans.append(cnt);
-			else ans.append(2);
-			ans.append('\n');
+			ans.append(cnt).append('\n');
 		}//while		
 
 		System.out.print(ans);
