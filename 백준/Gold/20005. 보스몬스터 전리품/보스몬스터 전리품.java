@@ -9,10 +9,10 @@ import java.util.StringTokenizer;
     링크 : https://www.acmicpc.net/problem/20005
  */
 public class Main {
-    static final char EMPTY = '.', BOSS = 'B', X = 'X';
+    static final char BOSS = 'B', X = 'X';
     static int R, C, P, HP;
     static char[][] map;
-    static int[] dps, boss;
+    static int[] dps;
     static boolean[][][] visited;
     static int[] dr = {-1, 1, 0, 0};
     static int[] dc = {0, 0, -1, 1};
@@ -28,7 +28,6 @@ public class Main {
         visited = new boolean[R][C][P];
 
         Queue<int[]> q = new LinkedList<>();
-        boss = new int[2];
         int player;
         for(int r=0; r<R; r++) {
             map[r] = br.readLine().toCharArray();
@@ -37,9 +36,6 @@ public class Main {
                     player = map[r][c] - 'a';
                     q.offer(new int[] {r, c, player});
                     visited[r][c][player] = true;
-                }else if(map[r][c] == BOSS) {
-                    boss[0] = r;
-                    boss[1] = c;
                 }
             }//for c
         }//for r
@@ -84,7 +80,7 @@ public class Main {
                 }//for
 
             }//while
-            
+
             HP -= sum;
             if(HP <= 0) return cnt;
         }//while
