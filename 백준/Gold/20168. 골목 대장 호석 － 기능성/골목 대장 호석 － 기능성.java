@@ -1,7 +1,6 @@
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.PriorityQueue;
 import java.util.StringTokenizer;
 
@@ -13,7 +12,6 @@ public class Main {
     static final int INF = Integer.MAX_VALUE;
     static int N, M, S, E, C;
     static boolean[] visited;
-    static int[] minCost;
     static ArrayList<ArrayList<Node>> list;
 
     public static void main(String[] args) throws Exception {
@@ -45,7 +43,6 @@ public class Main {
         int min = INF;
         PriorityQueue<Node> pq = new PriorityQueue<>();
         pq.offer(new Node(S, 0, 0));
-        minCost[S] = 0;
 
         Node curNode;
         int cur, cost, maxCost;
@@ -56,18 +53,17 @@ public class Main {
             maxCost = curNode.maxCost;
 
             if(cur == E) {
-                min = Math.min(min, maxCost);
-                continue;
+                min = maxCost;
+                break;
             }//if
 
             if(visited[cur]) continue;
             visited[cur] = true;
 
             for(Node next : list.get(cur)) {
-                if(visited[next.to] || next.cost + cost > C) continue;
-                if(minCost[next.to] > next.cost + cost) {
-                    minCost[next.to] = next.cost + cost;
-                    pq.offer(new Node(next.to, minCost[next.to], Math.max(maxCost, next.cost)));
+                if(visited[next.to]) continue;
+                if(next.cost + cost <= C) {
+                    pq.offer(new Node(next.to, next.cost + cost, Math.max(maxCost, next.cost)));
                 }
             }//for
 
@@ -79,8 +75,6 @@ public class Main {
 
     private static void init() {
         visited = new boolean[N];
-        minCost = new int[N];
-        Arrays.fill(minCost, INF);
         list = new ArrayList<>();
         for(int i=0; i<N; i++) {
             list.add(new ArrayList<>());
@@ -98,7 +92,7 @@ public class Main {
         }
         @Override
         public int compareTo(Node n) {
-            return this.cost - n.cost;
+            return this.maxCost - n.maxCost;
         }
     }//Node
 
