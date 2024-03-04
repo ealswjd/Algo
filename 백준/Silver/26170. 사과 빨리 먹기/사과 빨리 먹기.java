@@ -4,7 +4,7 @@ import java.util.StringTokenizer;
 
 // https://www.acmicpc.net/problem/26170
 public class Main {
-    static final int N=5, M=3, APPLE=1, INF=Integer.MAX_VALUE;
+    static final int N=5, M=3, INF=Integer.MAX_VALUE;
     static int R, C, min;
     static int[][] map;
     static boolean[][] visited;
@@ -52,9 +52,9 @@ public class Main {
             nr = r + dr[i];
             nc = c + dc[i];
             if(rangeCheck(nr, nc) || visited[nr][nc]) continue;
+            
             visited[nr][nc] = true;
-            if(map[nr][nc] == APPLE) dfs(nr, nc, move+1, cnt+1);
-            else dfs(nr, nc, move+1, cnt);
+            dfs(nr, nc, move+1, cnt+map[nr][nc]);
             visited[nr][nc] = false;
         }//for
     }//dfs
