@@ -6,9 +6,10 @@ import java.util.StringTokenizer;
 
 // https://www.acmicpc.net/problem/2210
 public class Main {
-    static final int N = 5, CNT=6;
+    static final int N = 5, SIZE=999999, CNT=6;
+    static int ans;
     static int[][] map;
-    static Set<Integer> set;
+    static boolean[] visited;
     static int[] dr = {-1, 1, 0, 0};
     static int[] dc = {0, 0, -1, 1};
 
@@ -25,7 +26,7 @@ public class Main {
         }//for
         br.close();
 
-        set = new HashSet<>();
+        visited = new boolean[SIZE+1];
 
         for(int r=0; r<N; r++) {
             for(int c=0; c<N; c++) {
@@ -33,12 +34,15 @@ public class Main {
             }//for
         }//for
 
-        System.out.print(set.size());
+        System.out.print(ans);
     }//main
 
     private static void dfs(int r, int c, int cnt, int result, int M) {
         if(cnt == CNT) {
-            set.add(result);
+            if(!visited[result]) {
+                ans++;
+                visited[result] = true;
+            }
             return;
         }//if
 
