@@ -1,6 +1,9 @@
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.StringTokenizer;
 
 /**
  * 문제 이름(난이도) : 윤이는 엄청난 것을 훔쳐갔습니다 (골드 3)
@@ -33,9 +36,9 @@ public class Main {
         int c = Integer.parseInt(st.nextToken()) - 1;
         br.close();
 
-        visited[a][A] = 0;
-        visited[b][B] = 0;
-        visited[c][C] = 0;
+        visited[a][A] = 1;
+        visited[b][B] = 1;
+        visited[c][C] = 1;
 
         bfs(b, B);
         bfs(c, C);
@@ -56,7 +59,7 @@ public class Main {
 
     private static void bfs(int start, int name) {
         Queue<int[]> q = new LinkedList<>();
-        q.offer(new int[] {start, 1});
+        q.offer(new int[] {start, 2});
 
         int[] tmp;
         int cur, time;
@@ -66,7 +69,7 @@ public class Main {
             time = tmp[1];
 
             for(int next : list.get(cur)) {
-                if(visited[next][name] != -1) continue;
+                if(visited[next][name] > 0) continue;
                 visited[next][name] = time;
                 q.offer(new int[] {next, time+1});
             }//for
@@ -75,10 +78,6 @@ public class Main {
 
     private static void init() {
         visited = new int[N][3];
-        for(int i=0; i<N; i++) {
-            Arrays.fill(visited[i], -1);
-        }
-
         list = new ArrayList<>();
         for(int i=0; i<N; i++) {
             list.add(new ArrayList<>());
