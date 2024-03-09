@@ -37,9 +37,9 @@ public class Main {
         visited[b][B] = 0;
         visited[c][C] = 0;
 
-        dfs(b, B, 1);
-        dfs(c, C, 1);
-        dfs(a, A, 1);
+        bfs(b, B);
+        bfs(c, C);
+        bfs(a, A);
 
         boolean isSuccess = false;
 
@@ -54,14 +54,24 @@ public class Main {
         else System.out.print("NO");
     }//main
 
-    private static void dfs(int cur, int name, int time) {
-        for(int next : list.get(cur)) {
-            if(visited[next][name] != -1) continue;
-            visited[next][name] = time;
-            dfs(next, name, time+1);
-        }//for
-    }//dfs
+    private static void bfs(int start, int name) {
+        Queue<int[]> q = new LinkedList<>();
+        q.offer(new int[] {start, 1});
 
+        int[] tmp;
+        int cur, time;
+        while(!q.isEmpty()) {
+            tmp = q.poll();
+            cur = tmp[0];
+            time = tmp[1];
+
+            for(int next : list.get(cur)) {
+                if(visited[next][name] != -1) continue;
+                visited[next][name] = time;
+                q.offer(new int[] {next, time+1});
+            }//for
+        }//while
+    }//bfs
 
     private static void init() {
         visited = new int[N][3];
