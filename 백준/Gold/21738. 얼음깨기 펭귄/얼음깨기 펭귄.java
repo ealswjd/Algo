@@ -52,7 +52,10 @@ public class Main {
             cur = tmp[0];
             cnt = tmp[1];
             if(cur <= S) sCnt++;
-            if(sCnt<=2 && cur <= S) total -= cnt;
+            if(sCnt<=2 && cur <= S) {
+                total -= cnt;
+                if(sCnt == 2) break;
+            }
 
             for(int next : list.get(cur)) {
                 if(visited[next]) continue;
