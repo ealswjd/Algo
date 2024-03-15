@@ -1,29 +1,27 @@
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.util.Arrays;
-import java.util.Comparator;
+import java.util.PriorityQueue;
 import java.util.StringTokenizer;
 
 // https://www.acmicpc.net/problem/1946
 public class Main {
     static int N;
-    static int[][] score;
+    static PriorityQueue<Score> score;
 
     public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         int T = Integer.parseInt(br.readLine());
 
+        score = new PriorityQueue<>();
         StringBuilder ans = new StringBuilder();
         StringTokenizer st;
         while(T-->0) {
             N = Integer.parseInt(br.readLine());
-            score = new int[N][2];
             for(int i=0; i<N; i++) {
                 st = new StringTokenizer(br.readLine());
-                int a = Integer.parseInt(st.nextToken());
-                int b = Integer.parseInt(st.nextToken());
-                score[i][0] = a;
-                score[i][1] = b;
+                int first = Integer.parseInt(st.nextToken());
+                int second = Integer.parseInt(st.nextToken());
+                score.offer(new Score(first, second));
             }//for
 
             ans.append(getCnt()).append('\n');
@@ -34,21 +32,30 @@ public class Main {
     }//main
 
     private static int getCnt() {
-        Arrays.sort(score, new Comparator<int[]>() {
-            @Override
-            public int compare(int[] o1, int[] o2) {
-                return o1[0] - o2[0];
-            }
-        });
-
-        int cnt = 1, max = score[0][1];
-        for(int i=1; i<N; i++) {
-            if(score[i][1] > max) continue;
+        int cnt = 1, max = score.poll().second;
+        int second;
+        while(!score.isEmpty()) {
+            second = score.poll().second;
+            if(second > max) continue;
             cnt++;
-            max = score[i][1];
-        }//for
+            max = second;
+        }//while
 
         return cnt;
     }//getCnt
+
+    static class Score implements Comparable<Score> {
+        int first;
+        int second;
+        public Score(int first, int second) {
+            this.first = first;
+            this.second = second;
+        }
+
+        @Override
+        public int compareTo(Score o) {
+            return this.first - o.first;
+        }
+    }//Score
 
 }//class
