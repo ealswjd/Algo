@@ -15,10 +15,7 @@ public class Main {
         int[] sum = new int[B+1];
         int next = 2;
         for(int i=1, n=1; i<=B; i++) {
-            if(i == next) {
-                n++;
-                next = n + i;
-            }
+            if(i == next) next = ++n + i;
             sum[i] = sum[i-1] + n;
         }
 
