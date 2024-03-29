@@ -1,6 +1,5 @@
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.util.Arrays;
 import java.util.StringTokenizer;
 
 // https://www.acmicpc.net/problem/2805
@@ -16,18 +15,19 @@ public class Main {
 
         trees = new int[N];
         st = new StringTokenizer(br.readLine());
+        int end = 0;
         for(int i=0; i<N; i++) {
             trees[i] = Integer.parseInt(st.nextToken());
+            end = Math.max(end, trees[i]);
         }
 
-        int max = getMax();
+        int max = getMax(end);
         System.out.print(max);
     }//main
 
-    private static int getMax() {
-        Arrays.sort(trees);
+    private static int getMax(int end) {
         int max = 0;
-        int start = 0, end = trees[N-1], mid=(start+end)/2;
+        int start = 0, mid=(start+end)/2;
         long sum;
 
         while(start < end) {
