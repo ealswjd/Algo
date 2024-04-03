@@ -21,8 +21,7 @@ public class Main {
             st = new StringTokenizer(br.readLine());
             for(int j=1; j<=M; j++) {
                 map[i][j] = Integer.parseInt(st.nextToken());
-                sum[i][j] = sum[i-1][j] + sum[i][j-1] - sum[i-1][j-1] + map[i][j];
-                map[i][j] = sum[i][j];
+                sum[i][j] = sum[i-1][j] + map[i][j];
             }
         }
         br.close();
@@ -32,13 +31,16 @@ public class Main {
 
     private static int getMax() {
         int max = MIN;
+        int score;
 
-        for(int r=1; r<=N; r++) {
-            for(int c=1; c<=M; c++) {
-                for(int r2=r; r2<=N; r2++) {
-                    for(int c2=c; c2<=M; c2++) {
-                        max = Math.max(max, sum[r2][c2] - sum[r2][c-1] - sum[r-1][c2] + sum[r-1][c-1]);
-                    }
+        for(int i=1; i<=N; i++) {
+            for(int j=i; j<=N; j++) {
+                score = 0;
+                for(int k=1; k<=M; k++) {
+                    if(score < 0) score = sum[j][k] - sum[i-1][k];
+                    else score += sum[j][k] - sum[i-1][k];
+
+                    max = Math.max(max, score);
                 }
             }
         }
