@@ -33,7 +33,6 @@ public class Main {
                 list.get(b).add(a);
             }
 
-            ans.append(String.format("Case %d: ", caseNum++));
             cnt = 0;
 
             for(int i=1; i<=N; i++) {
@@ -41,15 +40,21 @@ public class Main {
                 if(isTree(i, 1, 0)) cnt++;
             }
 
-            if(cnt == 0) ans.append("No trees.");
-            else if(cnt == 1) ans.append("There is one tree.");
-            else ans.append(String.format("A forest of %d trees.", cnt));
-
-            ans.append('\n');
+            print(ans, caseNum++, cnt);
         }//while
 
         System.out.print(ans);
     }//main
+
+    private static void print(StringBuilder ans, int num, int cnt) {
+        ans.append("Case ").append(num).append(": ");
+        
+        if(cnt == 0) ans.append("No trees.");
+        else if(cnt == 1) ans.append("There is one tree.");
+        else ans.append("A forest of ").append(cnt).append(" trees.");
+
+        ans.append('\n');
+    }//print
 
     private static boolean isTree(int cur, int v, int e) {
         checked[cur] = true;
