@@ -35,7 +35,7 @@ public class Main {
         for(int i=0; i<N; i++) {
             if(visited[i]) continue;
 
-            if(rivals[0][i]) dfs(i, WHITE);
+            if(rivals[BLUE][i]) dfs(i, WHITE);
             else dfs(i, BLUE);
         }
 
@@ -58,7 +58,7 @@ public class Main {
         System.out.print(white);
     }//print
 
-    
+
     private static void dfs(int cur, int color) {
         visited[cur] = true;
         if(color == WHITE) {
@@ -68,6 +68,7 @@ public class Main {
 
         for(int rival : list.get(cur)) {
             if(visited[rival]) continue;
+
             dfs(rival, (color+1) % 2);
         }
     }//dfs
