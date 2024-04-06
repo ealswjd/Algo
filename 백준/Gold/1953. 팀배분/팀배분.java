@@ -6,7 +6,7 @@ import java.util.StringTokenizer;
 // https://www.acmicpc.net/problem/1953
 public class Main {
     static final int BLUE = 0, WHITE=1;
-    private static int N;
+    private static int N, whiteCnt;
     private static boolean[][] rivals;
     private static boolean[] whiteTeam, visited;
     private static ArrayList<ArrayList<Integer>> list;
@@ -42,42 +42,32 @@ public class Main {
         print();
     }//main
 
-    
     private static void print() {
-        ArrayList<Integer> blueList = new ArrayList<>();
-        ArrayList<Integer> whiteList = new ArrayList<>();
-        StringBuilder ans = new StringBuilder();
+        StringBuilder blue = new StringBuilder();
+        StringBuilder white = new StringBuilder();
+
+        blue.append(N - whiteCnt).append('\n');
+        white.append(whiteCnt).append('\n');
 
         for(int i=0; i<N; i++) {
-            if(whiteTeam[i]) whiteList.add(i+1);
-            else blueList.add(i+1);
+            if(whiteTeam[i]) white.append(i+1).append(' ');
+            else blue.append(i+1).append(' ');
         }
 
-        append(ans, blueList);
-        append(ans, whiteList);
-
-        System.out.print(ans);
-    }
-
-    
-    private static void append(StringBuilder ans, ArrayList<Integer> list) {
-        ans.append(list.size()).append('\n');
-
-        for(int n : list) {
-            ans.append(n).append(' ');
-        }
-
-        ans.append('\n');
-    }//append
+        System.out.println(blue);
+        System.out.print(white);
+    }//print
 
     
     private static void dfs(int cur, int color) {
         visited[cur] = true;
-        if(color != BLUE) whiteTeam[cur] = true;
+        if(color == WHITE) {
+            whiteTeam[cur] = true;
+            whiteCnt++;
+        }
 
         for(int rival : list.get(cur)) {
             if(visited[rival]) continue;
-
             dfs(rival, (color+1) % 2);
         }
     }//dfs
