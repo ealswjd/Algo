@@ -28,7 +28,6 @@ public class Main {
 
         int cnt = 0;
         int half = (N+1) / 2;
-        
         for(int i=1; i<=N; i++) {
             visited = new boolean[N+1][2];
 
@@ -49,12 +48,12 @@ public class Main {
         int tmp = 0;
         for(int next : list.get(cur)) {
             if(visited[next][idx]) continue;
-            else tmp += dfs(next, idx, cnt, list)+1;
+            tmp += dfs(next, idx, cnt, list)+1;
         }
         cnt = tmp;
 
         return cnt;
-    }
+    }//dfs
 
 
     private static void init() {
