@@ -1,6 +1,5 @@
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.util.PriorityQueue;
 import java.util.StringTokenizer;
 
 /**
@@ -8,10 +7,9 @@ import java.util.StringTokenizer;
  * 링크 : https://www.acmicpc.net/problem/20207
  * */
 public class Main {
-    static final int S=0, E=1, D=365;
-    static int N;
+    static final int D=365;
+    static int N, S, E;
     static int[] calendar;
-    static PriorityQueue<int[]> schedule;
 
     public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -19,66 +17,55 @@ public class Main {
 
         init();
 
+        S = D;
         StringTokenizer st;
         for(int i=0; i<N; i++) {
             st = new StringTokenizer(br.readLine());
             int s = Integer.parseInt(st.nextToken());
-            int e = Integer.parseInt(st.nextToken());
+            int e = Integer.parseInt(st.nextToken())+1;
+            calendar[s]++;
+            calendar[e]--;
 
-            schedule.offer(new int[] {s, e});
+            S = Math.min(S, s);
+            E = Math.max(E, e);
         }
         br.close();
 
+        cumulative();
         int area = getArea();
         System.out.print(area);
     }//main
 
+
     private static int getArea() {
         int sum = 0;
-        int r = 1;
-        int start = schedule.peek()[S], end = schedule.peek()[E];
-        int[] cur;
+        int cnt, h;
 
-        while(!schedule.isEmpty()) {
-            cur = schedule.poll();
+        for(int i=S; i<=E; i++) {
+            cnt = 0;
+            h = 0;
 
-            // 연속 일정
-            if(cur[S] <= end || (cur[S] >= end && cur[S] - end <= 1)) {
-                end = Math.max(end, cur[E]);
-                r = paste(cur[S], cur[E], r);
-            }
-            else { // 연속 일정 아님
-                sum += r * (end - start + 1);
-                start = cur[S];
-                end = cur[E];
-
-                r = (paste(start, end, 1));
+            while(i+1<=E && calendar[i] > 0) {
+                cnt++;
+                h = Math.max(h, calendar[i++]);
             }
 
-        }//while
+            sum += cnt * h;
+        }
 
-        sum += r * (end - start + 1);
         return sum;
     }//getArea
 
-    private static int paste(int start, int end, int r) {
-        for(int i=start; i<=end; i++) {
-            calendar[i]++;
-            r = Math.max(r, calendar[i]);
+
+    private static void cumulative() {
+        for(int i=S; i<=E; i++) {
+            calendar[i] += calendar[i-1];
         }
+    }//cumulative
 
-        return r;
-    }//paste
-
+    
     private static void init() {
-        calendar = new int[D+1]; // (1 ≤ S ≤ E ≤ 365)
-
-        // 시작일이 가장 앞선 일정부터
-        // 시작일이 같을 경우 일정의 기간이 긴 것이 먼저
-        schedule = new PriorityQueue<>((o1, o2) -> {
-            if(o1[S] == o2[S]) return o2[E] - o1[E];
-            return o1[S] - o2[S];
-        });
+        calendar = new int[D+2]; // (1 ≤ S ≤ E ≤ 365)
     }//init
 
 }//class
