@@ -1,8 +1,6 @@
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.StringTokenizer;
+import java.util.*;
 
 /**
  * 문제 이름(난이도) : 할로윈의 양아치 (골드 3)
@@ -38,13 +36,14 @@ public class Main {
             list.get(b).add(a);
         }
 
+        Queue<Integer> q = new LinkedList<>();
         groups.add(new int[] {0, 0});
         for(int i=1; i<=N; i++) {
             if(visited[i]) continue;
 
             visited[i] = true;
             sum = 0;
-            int cnt = dfs(i, 1);
+            int cnt = bfs(i, q);
 
             groups.add(new int[] {cnt, sum});
         }
@@ -53,7 +52,26 @@ public class Main {
         System.out.print(ans);
     }//main
 
-    
+    private static int bfs(int cur, Queue<Integer> q) {
+        int cnt = 1;
+        q.offer(cur);
+
+        while(!q.isEmpty()) {
+            cur = q.poll();
+            sum += candies[cur];
+
+            for(int next : list.get(cur)) {
+                if(visited[next]) continue;
+
+                visited[next] = true;
+                cnt++;
+                q.offer(next);
+            }
+        }
+
+        return cnt;
+    }//bfs
+
     private static int getMaxCnt() {
         int max = 0, gSize = groups.size();
         int[][] dp = new int[gSize+1][K+1];
@@ -73,21 +91,7 @@ public class Main {
         return max;
     }//getMaxCnt
 
-    
-    private static int dfs(int cur, int cnt) {
-        sum += candies[cur];
 
-        for(int next : list.get(cur)) {
-            if(visited[next]) continue;
-
-            visited[next] = true;
-            cnt = dfs(next, cnt+1);
-        }
-
-        return cnt;
-    }//dfs
-
-    
     private static void init() {
         candies = new int[N+1];
         visited = new boolean[N+1];
