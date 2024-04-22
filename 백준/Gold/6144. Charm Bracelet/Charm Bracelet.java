@@ -27,16 +27,15 @@ public class Main {
     }//main
 
     private static int getMax() {
-        int[][] dp = new int[N+1][M+1];
+        int[] dp = new int[M+1];
 
         for(int i=1; i<=N; i++) {
-            for(int j=1; j<=M; j++) {
-                if(charms[i][W] > j) dp[i][j] = dp[i-1][j];
-                else dp[i][j] = Math.max(dp[i-1][j], dp[i-1][j-charms[i][W]] + charms[i][D]);
+            for(int j=M; j>=charms[i][W]; j--) {
+                dp[j] = Math.max(dp[j], dp[j-charms[i][W]] + charms[i][D]);
             }
         }
 
-        return dp[N][M];
+        return dp[M];
     }//getMax
 
 }//class
