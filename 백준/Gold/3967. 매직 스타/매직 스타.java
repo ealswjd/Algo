@@ -24,11 +24,12 @@ public class Main {
         init();
         initMagicStar();
         E = emptyList.size();
-        fill(0, 0, 0);
+
+        fill(0);
     }//main
 
-    private static void fill(int cur, int cnt, int sum) {
-        if(cnt == E) {
+    private static void fill(int cur) {
+        if(cur == E) {
             if(isMagicStar()) {
                 print();
                 System.exit(0);
@@ -39,14 +40,14 @@ public class Main {
         int idx = emptyList.get(cur);
         for(int i=1; i<=N; i++) {
             if(visited[i]) continue;
-            
+
             magicStar[idx] = i;
             visited[i] = true;
             total[group[idx][0]] += i;
             total[group[idx][1]] += i;
-            
-            fill(cur+1, cnt+1, sum);
-            
+
+            fill(cur+1);
+
             visited[i] = false;
             total[group[idx][0]] -= i;
             total[group[idx][1]] -= i;
@@ -63,7 +64,7 @@ public class Main {
     private static void print() {
         StringBuilder ans = new StringBuilder();
         char[][] output = new char[R][C];
-        
+
         for(int i=0; i<R; i++) {
             Arrays.fill(output[i], '.');
         }
