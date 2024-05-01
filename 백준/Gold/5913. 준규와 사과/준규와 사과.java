@@ -4,13 +4,11 @@ import java.util.StringTokenizer;
 
 // https://www.acmicpc.net/problem/5913
 public class Main {
-    static final int N=5, J=0, H=1;
-    static int K, M;
+    static final int N=5;
+    static int K;
     static boolean[][] visited;
-    static int[][] dr = {{1, 1, 1, 1, -1, -1, -1, -1, 0, 0, 0, 0, 0, 0, 0, 0}
-                        , {1, -1, 0, 0, 1, -1, 0, 0, 1, -1, 0, 0, 1, -1, 0, 0}};
-    static int[][] dc = {{0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, -1, -1, -1, -1}
-                        , {0, 0, -1, 1, 0, 0, -1, 1, 0, 0, -1, 1, 0, 0, -1, 1}};
+    static int[] dr = {-1, 1, 0, 0};
+    static int[] dc = {0, 0, -1, 1};
 
     public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -27,43 +25,35 @@ public class Main {
         br.close();
 
         visited[0][0] = true;
-        visited[N-1][N-1] = true;
 
-        M = (24-K)/2;
-        int cnt = getCnt(0, 0, 4, 4, 0);
+        int cnt = getCnt(0, 0, K+1);
         System.out.print(cnt);
     }//main
 
-    private static int getCnt(int jr, int jc, int hr, int hc, int moveCnt) {
-        if(jr==hr && jc==hc) {
-            if(moveCnt == M) return 1;
+    private static int getCnt(int r, int c, int moveCnt) {
+        if(r==N-1 && c==N-1) {
+            if(moveCnt == N*N) return 1;
             else return 0;
         }
 
         int cnt = 0;
-        int njr, njc, nhr, nhc;
+        int nr, nc;
 
-        for(int i=0; i<16; i++) {
-            njr = jr + dr[J][i];
-            njc = jc + dc[J][i];
-            nhr = hr + dr[H][i];
-            nhc = hc + dc[H][i];
-            if(!checkAvailability(njr, njc, nhr, nhc)) continue;
+        for(int i=0; i<4; i++) {
+            nr = r + dr[i];
+            nc = c + dc[i];
+            if(!checkAvailability(nr, nc)) continue;
 
-            visited[njr][njc] = true;
-            visited[nhr][nhc] = true;
-            cnt += getCnt(njr, njc, nhr, nhc, moveCnt+1);
-            visited[njr][njc] = false;
-            visited[nhr][nhc] = false;
+            visited[nr][nc] = true;
+            cnt += getCnt(nr, nc, moveCnt+1);
+            visited[nr][nc] = false;
         }
 
         return cnt;
     }//getCnt
 
-    private static boolean checkAvailability(int jr, int jc, int hr, int hc) {
-        if(jr >= N || jr < 0 || hr >= N || hr < 0 
-           || jc >= N || jc < 0 || hc >= N || hc < 0) return false;
-        return !visited[jr][jc] && !visited[hr][hc];
+    private static boolean checkAvailability(int r, int c) {
+        return r < N && r >= 0 && c < N && c >= 0 && !visited[r][c];
     }
 
 }//class
