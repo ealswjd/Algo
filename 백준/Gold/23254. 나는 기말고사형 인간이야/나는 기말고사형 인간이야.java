@@ -16,8 +16,8 @@ public class Main {
         M = Integer.parseInt(st.nextToken()); // 기말고사 과목 개수
         subjects = new int[M][2];
 
-        fill(new StringTokenizer(br.readLine()), A); // 공부를 하지 않아도 받을 수 있는 점수
-        fill(new StringTokenizer(br.readLine()), B); // 한 시간 공부할 때마다 올릴 수 있는 점수
+        fillSubjects(new StringTokenizer(br.readLine()), A); // 공부를 하지 않아도 받을 수 있는 점수
+        fillSubjects(new StringTokenizer(br.readLine()), B); // 한 시간 공부할 때마다 올릴 수 있는 점수
 
         int maxScore = getMaxScore();
         System.out.print(maxScore);
@@ -37,21 +37,27 @@ public class Main {
             a = pq.peek()[A]; // 필요한 점수
             b = pq.poll()[B]; // 시간당 점수
 
+            if(a == 0) continue;
             if(a < b) pq.add(new int[] {a, a});
             else {
-                score += b;
-                pq.add(new int[] {a-b, b});
-                N--;
+                if(a/b > N) {
+                    score += b * N;
+                    break;
+                }else {
+                    score += b * (a/b);
+                    pq.add(new int[] {a-(a/b)*b, b});
+                    N -= a/b;
+                }
             }
         }
 
         return score;
     }//getMaxScore
 
-    private static void fill(StringTokenizer st, int idx) {
+    private static void fillSubjects(StringTokenizer st, int idx) {
         for(int i=0; i<M; i++) {
             subjects[i][idx] = Integer.parseInt(st.nextToken());
         }
-    }//fill
+    }//fillSubjects
 
 }//class
