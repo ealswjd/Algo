@@ -1,14 +1,14 @@
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Comparator;
 import java.util.StringTokenizer;
 
 // https://www.acmicpc.net/problem/6208
 public class Main {
-    static final int X=0, W=1, F=2, C=3; // 위치, 길이, 재미, 비용
     static int L, N, B; // 길이, 재료 개수, 예산
-    static int[][] components;
+    static int[] X, W, F, C; // 위치, 길이, 재미, 비용
+    static ArrayList<ArrayList<Integer>> xList;
 
     public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -16,14 +16,16 @@ public class Main {
         L = Integer.parseInt(st.nextToken()); // 롤러코스터 길이
         N = Integer.parseInt(st.nextToken()); // 재료 개수
         B = Integer.parseInt(st.nextToken()); // 예산
-        components = new int[N][4];
+
+        init();
 
         for(int i=0; i<N; i++) {
             st = new StringTokenizer(br.readLine());
-            components[i][X] = Integer.parseInt(st.nextToken()); // 위치
-            components[i][W] = Integer.parseInt(st.nextToken()); // 길이
-            components[i][F] = Integer.parseInt(st.nextToken()); // 재미
-            components[i][C] = Integer.parseInt(st.nextToken()); // 비용
+            X[i] = Integer.parseInt(st.nextToken()); // 위치
+            W[i] = Integer.parseInt(st.nextToken()); // 길이
+            F[i] = Integer.parseInt(st.nextToken()); // 재미
+            C[i] = Integer.parseInt(st.nextToken()); // 비용
+            xList.get(X[i]).add(i);
         }
         br.close();
 
@@ -33,24 +35,21 @@ public class Main {
 
 
     private static int getMax() {
-        int max = 0;
+        int max = -1;
         int[][] dp = new int[L+1][B+1];
-        int end;
-
-        Arrays.sort(components, Comparator.comparingInt(o -> o[X]));
-        for(int[] component : components) {
-            if(component[X] == 0) {
-                dp[component[W]][B - component[C]] = component[F];
-            }
+        for(int i=0; i<=L; i++) {
+            Arrays.fill(dp[i], -1);
         }
+        dp[0][0] = 0;
 
-        for(int[] component : components) {
-            end=component[X]+component[W];
+        for(int l=0; l<L; l++) {
             for(int b=0; b<=B; b++) {
-                if(dp[component[X]][b] == 0) continue;
-                if(b-component[C] >= 0) {
-                    dp[end][b-component[C]] = Math.max(dp[end][b-component[C]]
-                            , dp[component[X]][b] + component[F]);
+                if(dp[l][b] != -1) {
+                    for(int x : xList.get(l)) {
+                        if(C[x] + b <= B) {
+                            dp[l+W[x]][b+C[x]] = Math.max(dp[l+W[x]][b+C[x]], dp[l][b]+F[x]);
+                        }
+                    }
                 }
             }
         }
@@ -59,8 +58,19 @@ public class Main {
             max = Math.max(max, dp[L][i]);
         }
 
-        return max == 0 ? -1 : max;
+        return max;
     }//getMax
+
+    private static void init() {
+        X = new int[N]; // 위치
+        W = new int[N]; // 길이
+        F = new int[N]; // 재미
+        C = new int[N]; // 비용
+        xList = new ArrayList<>(L);
+        for(int i=0; i<L; i++) {
+            xList.add(new ArrayList<>());
+        }
+    }//init
 
 }//class
 
