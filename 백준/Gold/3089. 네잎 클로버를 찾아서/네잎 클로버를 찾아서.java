@@ -41,29 +41,28 @@ public class Main {
         });
 
         int x = 0, y = 0;
-        int idxX = binarySearchX(x, y);
-        int idxY = binarySearchY(x, y);
+        int idxX, idxY;
 
         for(char c : orders) {
             if(c == 'U' || c == 'D') { // 상하
+                idxX = binarySearchX(x, y);
                 if(c == 'U') idxX++;
                 else idxX--;
 
                 x = X[idxX].x;
                 y = X[idxX].y;
 
-                idxY = binarySearchY(x, y);
             }else { // 좌우
+                idxY = binarySearchY(x, y);
                 if(c == 'R') idxY++;
                 else idxY--;
 
                 x = Y[idxY].x;
                 y = Y[idxY].y;
-                idxX = binarySearchX(x, y);
             }
         }
 
-        System.out.print(X[idxX]);
+        System.out.print(x + " " + y);
     }//getXY
 
     private static int binarySearchX(int x, int y) {
@@ -118,11 +117,6 @@ public class Main {
         public Position(int x, int y) {
             this.x = x;
             this.y = y;
-        }
-
-        @Override
-        public String toString() {
-            return x + " " + y;
         }
     }
 
