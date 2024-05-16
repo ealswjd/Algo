@@ -29,11 +29,11 @@ public class Main {
     }//main
 
     private static int dfs(int scv1, int scv2, int scv3) {
-        if(scv1 < 0) return dfs(0, scv2, scv3);
-        if(scv2 < 0) return dfs(scv1, 0, scv3);
-        if(scv3 < 0) return dfs(scv1, scv2, 0);
-        if(dp[scv1][scv2][scv3] != -1) return dp[scv1][scv2][scv3];
+        if(scv1 < 0) scv1 = 0;
+        if(scv2 < 0) scv2 = 0;
+        if(scv3 < 0) scv3 = 0;
         if(scv1 == 0 && scv2 == 0 && scv3 == 0) return 0;
+        if(dp[scv1][scv2][scv3] != -1) return dp[scv1][scv2][scv3];
 
         dp[scv1][scv2][scv3] = INF;
         for(int i=0; i<6; i++) {
