@@ -4,7 +4,6 @@ import java.util.StringTokenizer;
 
 // https://www.acmicpc.net/problem/13397
 public class Main {
-    static final int INF = 987654321;
     static int N, M;
     static int[] arr;
 
@@ -41,18 +40,17 @@ public class Main {
 
     private static int getCnt(int mid) {
         int cnt = 1;
-        int max = -1;
-        int min = INF;
+        int max = arr[0];
+        int min = arr[0];
 
         for(int i=0; i<N; i++) {
             min = Math.min(min, arr[i]);
             max = Math.max(max, arr[i]);
 
             if(max-min > mid) {
-                cnt++;
-                i--;
-                min = INF;
-                max = -1;
+                if(++cnt > M) return cnt;
+                min = arr[i];
+                max = arr[i];
             }
         }
 
