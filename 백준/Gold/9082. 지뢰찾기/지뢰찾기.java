@@ -45,6 +45,7 @@ public class Main {
         for(int i : map[1]) {
             cnt += i;
         }
+        
         return cnt;
     }//getCnt
 
