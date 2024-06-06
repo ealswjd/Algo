@@ -4,7 +4,7 @@ import java.io.InputStreamReader;
 // https://www.acmicpc.net/problem/9082
 public class Main {
     static int N;
-    static int[][] map;
+    static int[] numbers;
 
     public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -13,17 +13,14 @@ public class Main {
 
         while(T-->0) {
             N = Integer.parseInt(br.readLine());
-            map = new int[2][N+2];
+            numbers = new int[N];
 
             char[] tmp = br.readLine().toCharArray();
-            for(int i=1; i<=N; i++) {
-                map[0][i] = tmp[i-1] - '0';
+            for(int i=0; i<N; i++) {
+                numbers[i] = tmp[i] - '0';
             }
 
-            tmp = br.readLine().toCharArray();
-            for(int i=1; i<=N; i++) {
-                if(tmp[i-1] == '*') map[1][i] = 1;
-            }
+            br.readLine();
 
             int cnt = getCnt();
             ans.append(cnt).append('\n');
@@ -32,20 +29,15 @@ public class Main {
         System.out.print(ans);
     }//main
 
+    
     private static int getCnt() {
         int cnt = 0;
+        int start = N % 3 == 0 ? 1 : 0;
 
-        for(int i=1; i<=N; i++) {
-            if(map[0][i] > 0) { // 지뢰 있음
-                if(map[1][i-1] + map[1][i] + map[1][i+1] < map[0][i]) map[1][i+1] = 1;
-                if(map[1][i-1] + map[1][i] + map[1][i+1] < map[0][i]) map[1][i] = 1;
-            }
+        for(int i=start; i<N; i+=3) {
+            cnt += numbers[i];
         }
 
-        for(int i : map[1]) {
-            cnt += i;
-        }
-        
         return cnt;
     }//getCnt
 
