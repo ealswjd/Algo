@@ -1,5 +1,6 @@
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.util.Arrays;
 
 // https://www.acmicpc.net/problem/1562
 public class Main {
@@ -13,34 +14,41 @@ public class Main {
         N = Integer.parseInt(br.readLine());
         br.close();
 
+        init();
+
         int cnt = 0;
-        dp = new int[N+1][10][K+1];
-        for(int i=1; i<10; i++) {
-            dp[1][i][1<<i] = 1;
+        for (int i = 1; i < 10; i++) {
+            cnt = (cnt + getCnt(1, i, 1 << i)) % MOD;
         }
 
-        cnt = getCnt();
         System.out.print(cnt);
     }//main
 
-    private static int getCnt() {
+    
+    private static int getCnt(int n, int num, int bit) {
+        if(dp[n][num][bit] != -1) return dp[n][num][bit] % MOD;
+        if(n == N) {
+            if(bit == K) return 1;
+            return 0;
+        }
 
-        for(int i=2; i<=N; i++) {
+        dp[n][num][bit] = 0;
+
+        if(num - 1 >= 0) dp[n][num][bit] += getCnt(n+1, num-1, bit | (1 << num-1)) % MOD;
+        if(num + 1 < 10) dp[n][num][bit] += getCnt(n+1, num+1, bit | (1 << num+1)) % MOD;
+
+        return dp[n][num][bit] %= MOD;
+    }//getCnt
+
+    
+    private static void init() {
+        dp = new int[N + 1][10][K + 1]; // 길이 N, 0~9, 0~9까지 사용 여부
+
+        for(int i=0; i<=N; i++) {
             for(int j=0; j<10; j++) {
-                for(int k=0; k<(1<<10); k++) {
-                    if(j==0) dp[i][j][k | 1<<j] = (dp[i][j][k | 1<<j] + dp[i-1][j+1][k]) % MOD;
-                    else if(j==9) dp[i][j][k | 1<<j] = (dp[i][j][k | 1<<j] + dp[i-1][j-1][k]) % MOD;
-                    else dp[i][j][k | 1<<j] = (dp[i][j][k | 1<<j] + dp[i-1][j-1][k] + dp[i-1][j+1][k]) % MOD;
-                }
+                Arrays.fill(dp[i][j], -1);
             }
         }
-
-        int cnt = 0;
-        for(int i=0; i<10; i++){
-            cnt = (cnt + dp[N][i][(1<<10)-1]) % MOD;
-        }
-
-        return cnt;
-    }//getCnt
+    }//init
 
 }//class
