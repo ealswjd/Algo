@@ -1,33 +1,41 @@
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 
-// https://www.acmicpc.net/problem/9251
 public class Main {
-	static char[] A, B;
-	static int[][] dp;
+    static int lenA, lenB;
+    static char[] A, B;
+    static int[][] dp;
 
-	public static void main(String[] args) throws Exception{
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		A = br.readLine().toCharArray();
-		B = br.readLine().toCharArray();
-		br.close();
-		
-		int lenA = A.length;
-		int lenB = B.length;
+    public static void main(String[] args) throws Exception {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        A = br.readLine().toCharArray();
+        B = br.readLine().toCharArray();
+        br.close();
 
-		dp = new int[lenA+1][lenB+1];
-		System.out.print(lcs(lenA, lenB));
-	}//main
+        init();
 
-	private static int lcs(int a, int b) {
-		for(int r=1; r<=a; r++) {
-			for(int c=1; c<=b; c++) {
-				if(A[r-1] == B[c-1]) dp[r][c] = dp[r-1][c-1] + 1;
-				else dp[r][c] = Math.max(dp[r-1][c], dp[r][c-1]);
-			}//for c
-		}//for r
-		
-		return dp[a][b];
-	}//lcs
+        int length = getLength();
+        System.out.print(length);
+    }//main
+
+    private static int getLength() {
+
+        for(int a=1; a<=lenA; a++) {
+            for(int b=1; b<=lenB; b++) {
+                if(A[a-1] == B[b-1]) dp[a][b] = dp[a-1][b-1] + 1;
+                else {
+                    dp[a][b] = Math.max(dp[a-1][b], dp[a][b-1]);
+                }
+            }
+        }
+
+        return dp[lenA][lenB];
+    }//getMinCnt
+
+    private static void init() {
+        lenA = A.length;
+        lenB = B.length;
+        dp = new int[lenA+1][lenB+1];
+    }//init
 
 }//class
