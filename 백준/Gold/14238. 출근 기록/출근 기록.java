@@ -4,7 +4,8 @@ import java.io.InputStreamReader;
 // https://www.acmicpc.net/problem/14238
 public class Main {
     static final int A=0, B=1, C=2;
-    static int N, aCnt, bCnt, cCnt;
+    static int N;
+    static int[] cnt;
     static char[] S, result;
     static boolean[][][][][] dp;
 
@@ -20,22 +21,22 @@ public class Main {
     }//main
 
     private static boolean getResult(int a, int b, int c, int one, int two) {
-        if(a == aCnt && b == bCnt && c == cCnt) return true;
+        if(a == cnt[A] && b == cnt[B] && c == cnt[C]) return true;
         if(dp[a][b][c][one][two]) return false;
 
         dp[a][b][c][one][two] = true;
 
-        if(a < aCnt) {
+        if(a < cnt[A]) {
             result[a+b+c+1] = 'A';
             if(getResult(a+1, b, c, A, one)) return true;
         }
 
-        if(b < bCnt && one != B) {
+        if(b < cnt[B] && one != B) {
             result[a+b+c+1] = 'B';
             if(getResult(a, b+1, c, B, one)) return true;
         }
 
-        if(c < cCnt && one!=C && two!=C) {
+        if(c < cnt[C] && one!=C && two!=C) {
             result[a+b+c+1] = 'C';
             if(getResult(a, b, c+1, C, one)) return true;
         }
@@ -55,15 +56,14 @@ public class Main {
 
     private static void init() {
         N = S.length;
+        cnt = new int[3];
 
         for(int i=0; i<N; i++) {
-            if(S[i] == 'A') aCnt++;
-            else if(S[i] == 'B') bCnt++;
-            else cCnt++;
+            cnt[S[i] - 'A']++;
         }
 
-        dp = new boolean[aCnt+1][bCnt+1][cCnt+1][3][3];
-        result = new char[N+2];
+        dp = new boolean[cnt[A]+1][cnt[B]+1][cnt[C]+1][3][3];
+        result = new char[N+1];
     }//init
 
 }//class
