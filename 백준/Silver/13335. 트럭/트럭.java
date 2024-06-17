@@ -1,57 +1,57 @@
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.StringTokenizer;
 
+// https://www.acmicpc.net/problem/13335
 public class Main {
-	static int N, W, L;
+    static int N, W, L;
 
-	public static void main(String[] args) throws IOException {
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		StringTokenizer st = new StringTokenizer(br.readLine());
-		// 첫 번째 줄에는 세 개의 정수 n, w, L 이 주어짐
-		N = getIntToken(st); // 다리를 건너는 트럭의 수
-		W = getIntToken(st); // 다리의 길이
-		L = getIntToken(st); // 다리의 최대하중
-		
-		Queue<Integer> trucks = new LinkedList<>(); // 트럭들
-		//두 번째 줄에는 n개의 정수가 주어지는데, 트럭의 무게를 나타낸다.
-		st = new StringTokenizer(br.readLine());
-		for(int i=0; i<N; i++) {
-			trucks.offer(getIntToken(st));
-		}//for
-		br.close();
-		
-		System.out.print(solution(trucks));
-	}//main
+    public static void main(String[] args) throws Exception {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st = new StringTokenizer(br.readLine());
+        N = Integer.parseInt(st.nextToken()); // 다리를 건너는 트럭의 수
+        W = Integer.parseInt(st.nextToken()); // 다리의 길이
+        L = Integer.parseInt(st.nextToken()); // 다리의 최대하중
 
-	private static int solution(Queue<Integer> trucks) {
-		int time = W; // 모든 트럭들이 다리를 건너는 최단시간
-		int sum = 0; // 현재 다리를 건너는 트럭들의 무게 합
-		Queue<Integer> bridge = new LinkedList<>(); // 다리
-		
-		while(!trucks.isEmpty()) {
-			if(bridge.size() < W) {
-				if(trucks.peek() + sum > L) {
-					for(int i=bridge.size(); i<W; i++) bridge.offer(0);
-				}else {
-					bridge.offer(trucks.peek());
-					sum += trucks.poll();
-				}
-			}
-			else {
-				sum -= bridge.poll();
-				time++;
-			}
-		}//while
-		
-		return time+bridge.size();
-	}//solution
+        Queue<Integer> trucks = new LinkedList<>();
+        st = new StringTokenizer(br.readLine());
+        for(int i=0; i<N; i++) {
+            trucks.offer(Integer.parseInt(st.nextToken()));
+        }
+        br.close();
 
-	private static int getIntToken(StringTokenizer st) {
-		return Integer.parseInt(st.nextToken());
-	}//getIntToken
+        int time = getTime(trucks);
+        System.out.print(time);
+    }//main
+
+    private static int getTime(Queue<Integer> trucks) {
+        Queue<Integer> bridge = new LinkedList<>();
+        int time = W;
+        int sum = 0;
+
+        while(!trucks.isEmpty()) {
+            // 다리에 자리 있음
+            if(bridge.size() < W) {
+                if(sum + trucks.peek() <= L) { // 트럭 올라갈 수 있음
+                    sum += trucks.peek();
+                    bridge.offer(trucks.poll());
+                }
+                else { // 못올라감
+                    for(int i=bridge.size(); i<W; i++) {
+                        bridge.offer(0);
+                    }
+                }
+            }
+            else { // 다리 꽉 참 -> 트럭 빠져나가기
+                sum -= bridge.poll();
+                time++;
+            }
+        }
+
+
+        return time + bridge.size();
+    }//getTime
 
 }//class
