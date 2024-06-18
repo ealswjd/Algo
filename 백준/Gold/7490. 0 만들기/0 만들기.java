@@ -58,6 +58,7 @@ public class Main {
     private static int getSum() {
         int sum = 0;
         char prev = '.';
+        char op = '.';
         int tmp = 0;
 
         for(int i=0; i<M-1; i += 2) {
@@ -67,27 +68,17 @@ public class Main {
                     tmp = (tmp + result[i]) * 10;
                     i += 2;
                 }
-                tmp += result[i];
 
-                if(prev == '-') sum -= tmp;
-                else sum += tmp;
-
-                tmp = 0;
-                prev = i+1 < M ? (char) result[i+1] : '.';
+                op = i+1 < M ? (char) result[i+1] : '.';
             }
-            else if(result[i+1] == '+') {
-                if(prev == '-') sum -= result[i];
-                else sum += result[i];
+            else op = (char) result[i+1];
 
-                prev = '+';
-            }
-            else if(result[i+1] == '-') {
-                if(prev == '-') sum -= result[i];
-                else sum += result[i];
+            tmp += result[i];
+            if(prev == '-') sum -= tmp;
+            else sum += tmp;
 
-                prev = '-';
-            }
-
+            tmp = 0;
+            prev = op;
         }
 
         if(prev == '+') sum += N;
