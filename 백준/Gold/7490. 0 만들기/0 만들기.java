@@ -3,6 +3,7 @@ import java.io.InputStreamReader;
 
 // https://www.acmicpc.net/problem/7490
 public class Main {
+    static final int EMPTY = ' ', PLUS = '+', MINUS = '-';
     static int N, M;
     static StringBuilder ans;
     static int[] result;
@@ -57,32 +58,32 @@ public class Main {
 
     private static int getSum() {
         int sum = 0;
-        char prev = '.';
-        char op = '.';
+        int prevOp = '.';
+        int nextOp = '.';
         int tmp = 0;
 
         for(int i=0; i<M-1; i += 2) {
 
-            if(result[i+1] == ' ') {
+            if(result[i+1] == EMPTY) {
                 while(i<M-1 && result[i+1] == ' ') {
                     tmp = (tmp + result[i]) * 10;
                     i += 2;
                 }
 
-                op = i+1 < M ? (char) result[i+1] : '.';
+                nextOp = i+1 < M ? result[i+1] : '.';
             }
-            else op = (char) result[i+1];
+            else nextOp = result[i+1];
 
             tmp += result[i];
-            if(prev == '-') sum -= tmp;
+            if(prevOp == MINUS) sum -= tmp;
             else sum += tmp;
 
             tmp = 0;
-            prev = op;
+            prevOp = nextOp;
         }
 
-        if(prev == '+') sum += N;
-        else if(prev == '-') sum -= N;
+        if(prevOp == PLUS) sum += N;
+        else if(prevOp == MINUS) sum -= N;
 
         return sum;
     }//getSum
