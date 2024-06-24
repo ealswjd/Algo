@@ -27,16 +27,16 @@ public class Main {
     }//main
 
     private static int getMax() {
-        int[][] dp = new int[N+1][K+1];
+        int[] dp = new int[K+1];
 
         for(int i=1; i<=N; i++) {
-            for(int k=1; k<=K; k++) {
-                if(k < W[i]) dp[i][k] = dp[i-1][k];
-                else dp[i][k] = Math.max(dp[i-1][k], dp[i-1][k-W[i]] + V[i]);
+            for(int k=K; k>0; k--) {
+                if(k < W[i]) break;
+                dp[k] = Math.max(dp[k], dp[k-W[i]] + V[i]);
             }
         }
 
-        return dp[N][K];
+        return dp[K];
     }//getMax
 
     private static void init() {
