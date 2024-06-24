@@ -39,12 +39,10 @@ public class Main {
             for(int s=0; s<V; s++) { //출발
                 for(int e=0; e<V; e++) { // 도착
                     cost[s][e] = Math.min(cost[s][e], cost[s][k] + cost[k][e]);
-                    
-                    // 사이클 가능하다면 최솟값 갱신
-                    if(s != e && cost[s][e] != INF && cost[e][s] != INF) {
-                        min = Math.min(min, cost[s][e] + cost[e][s]);
-                    }
                 }
+                
+                // 사이클 가능하다면 최솟값 갱신
+                min = Math.min(min, cost[s][s]);
             }
         }
 
