@@ -3,6 +3,7 @@ import java.io.InputStreamReader;
 import java.util.Arrays;
 import java.util.StringTokenizer;
 
+// 도로의 길이의 합이 가장 작은 사이클을 찾는 프로그램
 // https://www.acmicpc.net/problem/1956
 public class Main {
     static final int INF = 9_000_000;
@@ -32,13 +33,14 @@ public class Main {
     }//main
 
     private static int floyd() {
-        int min = INF;
+        int min = INF; // 도로의 길이의 합 최솟값
 
         for(int k=0; k<V; k++) { // 경유지
-            for(int s=0; s<V; s++) { // 출발
+            for(int s=0; s<V; s++) { //출발
                 for(int e=0; e<V; e++) { // 도착
                     cost[s][e] = Math.min(cost[s][e], cost[s][k] + cost[k][e]);
                     
+                    // 사이클 가능하다면 최솟값 갱신
                     if(s != e && cost[s][e] != INF && cost[e][s] != INF) {
                         min = Math.min(min, cost[s][e] + cost[e][s]);
                     }
@@ -46,7 +48,7 @@ public class Main {
             }
         }
 
-        if(min == INF) return -1;
+        if(min == INF) return -1; // 운동 경로 찾기 불가능
         return min;
     }//floyd
 
