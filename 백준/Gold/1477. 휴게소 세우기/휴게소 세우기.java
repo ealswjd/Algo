@@ -6,21 +6,21 @@ import java.util.StringTokenizer;
 // https://www.acmicpc.net/problem/1477
 public class Main {
     static int N, M, L;
-    static int[] restAreas;
+    static int[] arr;
 
     public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
-        N = Integer.parseInt(st.nextToken()); // 휴게소의 개수
-        M = Integer.parseInt(st.nextToken()); // 더 지으려고 하는 휴게소의 개수
-        L = Integer.parseInt(st.nextToken()); // 고속도로의 길이
+        // 현재 휴게소의 개수 N, 더 지으려고 하는 휴게소의 개수 M, 고속도로의 길이 L
+        N = tokenToInt(st);
+        M = tokenToInt(st);
+        L = tokenToInt(st);
 
-        restAreas = new int[N+2];
-        restAreas[N+1] = L;
-
+        init();
+        
         st = new StringTokenizer(br.readLine());
-        for(int i=1; i<=N; i++){
-            restAreas[i] = Integer.parseInt(st.nextToken());
+        for(int i=1; i<=N; i++) {
+            arr[i] = tokenToInt(st); // 현재 휴게소의 위치
         }
         br.close();
 
@@ -29,26 +29,40 @@ public class Main {
     }//main
 
     private static int getMin() {
-        Arrays.sort(restAreas);
-        
-        int s = 1;
-        int e = L;
+        Arrays.sort(arr);
+
         int len = N+2;
-        int mid, cnt;
+        int start = 1;
+        int end = L;
+        int mid;
 
-        while(s <= e) {
-            mid = (s+e) / 2;
-            cnt = 0;
+        while(start <= end) {
+            mid = (start + end) / 2;
 
-            for(int i=1; i<len; i++) {
-                cnt += (restAreas[i] - restAreas[i-1] - 1) / mid;
-            }
-
-            if(cnt > M) s = mid + 1;
-            else e = mid - 1;
+            if(getCnt(mid, len) > M) start = mid+1;
+            else end = mid-1;
         }
 
-        return s;
+        return start;
     }//getMin
+
+    private static int getCnt(int mid, int len) {
+        int cnt = 0;
+
+        for(int i=1; i<len; i++) {
+            cnt += (arr[i] - arr[i-1] - 1) / mid;
+        }
+
+        return cnt;
+    }//getCnt
+
+    private static void init() {
+        arr = new int[N+2];
+        arr[N+1] = L;
+    }//init
+
+    private static int tokenToInt(StringTokenizer st) {
+        return Integer.parseInt(st.nextToken());
+    }//tokenToInt
 
 }//class
