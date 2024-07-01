@@ -1,5 +1,7 @@
-import java.io.*;
-import java.util.PriorityQueue;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.util.StringTokenizer;
 
 // https://www.acmicpc.net/problem/23061
@@ -36,26 +38,26 @@ public class Main {
         br.close();
     }//main
 
-    private static int getNumber(int max) {
-        int[] dp = new int[max+1];
+    private static int getNumber(int w) {
+        int[] dp = new int[w+1];
 
         for(int i=0; i<N; i++) {
-            for(int k=max; k>=W[i]; k--) {
+            for(int k=w; k>=W[i]; k--) {
                 dp[k] = Math.max(dp[k], dp[k-W[i]] + V[i]);
             }
         }
 
-        PriorityQueue<double[]> pq = new PriorityQueue<>((o1, o2) -> {
-            if(o1[1] == o2[1]) return Double.compare(o1[0], o2[0]);
-            return Double.compare(o2[1], o1[1]);
-        });
-        
+        double max = 0;
+        int number = 1;
         for(int i=0; i<M; i++) {
-            double val = (double) dp[K[i]] / K[i];
-            pq.offer(new double[] {i+1, val});
+            double cur = (double) dp[K[i]] / K[i];
+            if(max < cur) {
+                number = i+1;
+                max = cur;
+            }
         }
 
-        return (int) (pq.poll()[0]);
+        return number;
     }//getNumber
 
     private static void init() {
