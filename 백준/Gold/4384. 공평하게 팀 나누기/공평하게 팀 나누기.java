@@ -3,7 +3,6 @@ import java.io.InputStreamReader;
 
 // https://www.acmicpc.net/problem/4384
 public class Main {
-    static final int MAX = 450; // 몸무게 최댓값
     static int N; // 총 인원의 수
     static int[] weights; // 몸무게
 
@@ -13,18 +12,20 @@ public class Main {
         weights = new int[N]; // 몸무게
 
         int total = 0;
+        int max = 0;
         for(int i=0; i<N; i++) {
             weights[i] = Integer.parseInt(br.readLine());
             total += weights[i];
+            max = Math.max(max, weights[i]);
         }
         br.close();
 
-        splitTeam(total);
+        splitTeam(total, max);
     }//main
 
-    private static void splitTeam(int total) {
+    private static void splitTeam(int total, int max) {
         int half = N/2;
-        int max = half * MAX;
+        max = half * max;
         boolean[][] dp = new boolean[half+1][max+1];
         dp[0][0] = true;
 
@@ -41,7 +42,7 @@ public class Main {
         int teamB = 0;
         int min = Integer.MAX_VALUE;
 
-        for(int w=0; w<max; w++) {
+        for(int w=0; w<=max; w++) {
             if(dp[half][w]) {
                 int diff = Math.abs(w - (total-w));
                 if(min > diff) {
