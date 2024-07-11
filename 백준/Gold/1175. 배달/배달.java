@@ -21,12 +21,12 @@ public class Main {
 
         int r = 0;
         int c = 0;
-        int num = 1;
+        int num = 0;
         for(int i=0; i<N; i++) {
             char[] tmp = br.readLine().toCharArray();
             for(int j=0; j<M; j++) {
                 map[i][j] = tmp[j];
-                
+
                 if(map[i][j] == 'S') {
                     map[i][j] = '.';
                     r = i;
@@ -44,38 +44,36 @@ public class Main {
     }//main
 
     private static int getTime(int r, int c) {
+        int C = 3;
         Queue<int[]> q = new LinkedList<>();
-        boolean[][][][][] visited = new boolean[N][M][4][2][2];
-        q.offer(new int[] {r, c, 0, -1, 0, 0});
+        boolean[][][][] visited = new boolean[N][M][4][C+1];
+        q.offer(new int[] {r, c, 0, -1, 0});
 
         int[] cur;
-        int time, dir, c1, c2;
+        int time, dir, cnt;
         while(!q.isEmpty()) {
             cur = q.poll();
             r = cur[0];
             c = cur[1];
             time = cur[2]; // 시간
             dir = cur[3]; // 이전 방향
-            c1 = cur[4]; // 선물 1
-            c2 = cur[5]; // 선물 2
+            cnt = cur[4]; // 배달 완료
 
-            if(c1 == 1 && c2 == 1) return time;
+            if(cnt == C) return time;
 
             for(int i=0; i<4; i++) {
                 if(i == dir) continue;
                 int nr = r + dr[i];
                 int nc = c + dc[i];
-                int nc1 = c1;
-                int nc2 = c2;
-                
+                int nCnt = cnt;
+
                 if(rangeCheck(nr, nc)) continue;
-                if(visited[nr][nc][i][c1][c2]) continue;
+                if(visited[nr][nc][i][cnt]) continue;
 
-                if(map[nr][nc] == 1) nc1 = 1;
-                else if(map[nr][nc] == 2) nc2 = 1;
+                if(map[nr][nc] < C) nCnt |= (1 << map[nr][nc]);
 
-                q.offer(new int[]{nr, nc, time+1, i, nc1, nc2});
-                visited[nr][nc][i][nc1][nc2] = true;
+                q.offer(new int[]{nr, nc, time+1, i, nCnt});
+                visited[nr][nc][i][nCnt] = true;
             }
         }
 
