@@ -6,6 +6,7 @@ import java.util.StringTokenizer;
 
 // https://www.acmicpc.net/problem/1175
 public class Main {
+    static final int C = 3; // 선물을 배달해야 하는 곳은 정확하게 2개
     static int N, M;
     static int[][] map;
     static int[] dr = {-1, 1, 0, 0};
@@ -44,7 +45,6 @@ public class Main {
     }//main
 
     private static int getTime(int r, int c) {
-        int C = 3;
         Queue<int[]> q = new LinkedList<>();
         boolean[][][][] visited = new boolean[N][M][4][C+1];
         q.offer(new int[] {r, c, 0, -1, 0});
@@ -63,13 +63,12 @@ public class Main {
 
             for(int i=0; i<4; i++) {
                 if(i == dir) continue;
+
                 int nr = r + dr[i];
                 int nc = c + dc[i];
                 int nCnt = cnt;
 
-                if(rangeCheck(nr, nc)) continue;
-                if(visited[nr][nc][i][cnt]) continue;
-
+                if(rangeCheck(nr, nc) || visited[nr][nc][i][cnt]) continue;
                 if(map[nr][nc] < C) nCnt |= (1 << map[nr][nc]);
 
                 q.offer(new int[]{nr, nc, time+1, i, nCnt});
