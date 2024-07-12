@@ -7,7 +7,7 @@ import java.util.StringTokenizer;
 public class Main {
     static final int MOD = 1_000_000_007;
     static int N, M;
-    static long[][] dp;
+    static int[][] dp;
 
     public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -17,25 +17,25 @@ public class Main {
 
         init();
 
-        long cnt = getCnt(0, 0);
+        int cnt = getCnt(0, 0);
         System.out.print(cnt);
     }//main
 
-    private static long getCnt(int r, int c) {
+    private static int getCnt(int r, int c) {
         if(r == N-1 && c == M-1) return 1;
         if(dp[r][c] != -1) return dp[r][c] % MOD;
 
-        long cnt = 0;
-        
+        int cnt = 0;
+
         if(c+1 < M) cnt = getCnt(r, c+1) % MOD;
-        if(r+1 < N) cnt += getCnt(r+1, c) % MOD;
-        if(r+1 < N && c+1 < M) cnt += getCnt(r+1, c+1) % MOD;
+        if(r+1 < N) cnt = (cnt + getCnt(r+1, c)) % MOD;
+        if(r+1 < N && c+1 < M) cnt = (cnt + getCnt(r+1, c+1)) % MOD;
 
         return dp[r][c] = cnt % MOD;
     }//getCnt
 
     private static void init() {
-        dp = new long[N][M];
+        dp = new int[N][M];
 
         for(int i=0; i<N; i++) {
             Arrays.fill(dp[i], -1);
