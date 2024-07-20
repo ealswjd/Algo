@@ -37,23 +37,15 @@ public class Main {
     private static int getMax() {
         int max = 0;
         int[][] dp = new int[A+1][B+1];
-        boolean[][] selected = new boolean[A+1][B+1];
-        selected[0][0] = true;
 
         for(int i=0; i<N; i++) {
             for(int a=A; a>=0; a--) {
                 for(int b=B; b>=0; b--) {
                     if(a - W[i] >= 0) {
-                        selected[a][b] |= selected[a-W[i]][b];
-                        if(selected[a][b]) {
-                            dp[a][b] = Math.max(dp[a][b], dp[a-W[i]][b] + V[i]);
-                        }
+                        dp[a][b] = Math.max(dp[a][b], dp[a-W[i]][b] + V[i]);
                     }
                     if(b - W[i] >= 0) {
-                        selected[a][b] |= selected[a][b-W[i]];
-                        if(selected[a][b]) {
-                            dp[a][b] = Math.max(dp[a][b], dp[a][b-W[i]] + V[i]);
-                        }
+                        dp[a][b] = Math.max(dp[a][b], dp[a][b-W[i]] + V[i]);
                     }
                 }
             }
@@ -67,7 +59,7 @@ public class Main {
 
         return max;
     }//getMax
-    
+
     private static void inputArr(StringTokenizer st, int[] arr) {
 
         for(int i=0; i<N; i++) {
