@@ -35,7 +35,6 @@ public class Main {
 
 
     private static int getMax() {
-        int max = 0;
         int[][] dp = new int[A+1][B+1];
 
         for(int i=0; i<N; i++) {
@@ -51,13 +50,7 @@ public class Main {
             }
         }
 
-        for(int a=0; a<=A; a++) {
-            for(int b=0; b<=B; b++) {
-                max = Math.max(max, dp[a][b]);
-            }
-        }
-
-        return max;
+        return dp[A][B];
     }//getMax
 
     private static void inputArr(StringTokenizer st, int[] arr) {
