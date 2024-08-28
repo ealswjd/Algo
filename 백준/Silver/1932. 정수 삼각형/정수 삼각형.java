@@ -33,11 +33,10 @@ public class Main {
         if(r == N-1) return triangle[r][c];
 
         if(dp[r][c] == -1) {
-            dp[r][c] = Math.max(dp[r][c], Math.max(getMax(r+1, c),
-                    getMax(r+1, c+1)) + triangle[r][c]);
+            // 왼, 오 비교
+            dp[r][c] = Math.max(getMax(r+1, c), getMax(r+1, c+1)) + triangle[r][c];
         }
 
-        // 왼, 오 비교
         return dp[r][c];
     }//getMax
 
@@ -50,6 +49,6 @@ public class Main {
             Arrays.fill(dp[i], -1);
         }
     }//init
-    
+
     
 }//class
