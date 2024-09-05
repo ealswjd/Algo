@@ -11,13 +11,13 @@ public class Main {
     public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
-        // 현재 휴게소의 개수 N, 더 지으려고 하는 휴게소의 개수 M, 고속도로의 길이 L
-        N = tokenToInt(st);
-        M = tokenToInt(st);
-        L = tokenToInt(st);
+
+        N = tokenToInt(st); // 현재 휴게소의 개수
+        M = tokenToInt(st); // 더 지으려고 하는 휴게소의 개수
+        L = tokenToInt(st); // 고속도로의 길이
 
         init();
-        
+
         st = new StringTokenizer(br.readLine());
         for(int i=1; i<=N; i++) {
             arr[i] = tokenToInt(st); // 현재 휴게소의 위치
@@ -36,11 +36,11 @@ public class Main {
         int end = L;
         int mid;
 
-        while(start <= end) {
+        while(start < end) {
             mid = (start + end) / 2;
 
             if(getCnt(mid, len) > M) start = mid+1;
-            else end = mid-1;
+            else end = mid;
         }
 
         return start;
