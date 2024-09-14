@@ -1,7 +1,6 @@
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.PriorityQueue;
 import java.util.StringTokenizer;
 
@@ -77,19 +76,19 @@ public class Main {
 
     // R 연산 : 배열 A의 모든 행에 대해서 정렬을 수행
     static int R(int r, PriorityQueue<int[]> pq) {
-        HashMap<Integer, Integer> cntMap = new HashMap<>();
+        int[] count = new int[N+1];
         int size = 0;
 
-        // 수가 몇 개 있는지 개수 세기
+        // 숫자 개수 세기
         for(int c=0; c<cCnt; c++) {
             if(A[r][c] == 0) continue;
-            cntMap.put(A[r][c], cntMap.getOrDefault(A[r][c], 0) + 1);
+            count[A[r][c]]++;
         }
 
         // pq에 0을 제외한 수와 개수 담기
         for(int n=1; n<=N; n++) {
-            if(cntMap.containsKey(n)) {
-                pq.offer(new int[] {n, cntMap.get(n)});
+            if(count[n] != 0) {
+                pq.offer(new int[] {n, count[n]});
             }
         }
 
@@ -113,19 +112,19 @@ public class Main {
 
     // C 연산 : 배열 A의 모든 열에 대해서 정렬을 수행
     static int C(int c, PriorityQueue<int[]> pq) {
-        HashMap<Integer, Integer> cntMap = new HashMap<>();
+        int[] count = new int[N+1];
         int size = 0;
 
-        // 수가 몇 개 있는지 개수 세기
+        // 숫자 개수 세기
         for(int r=0; r<rCnt; r++) {
             if(A[r][c] == 0) continue;
-            cntMap.put(A[r][c], cntMap.getOrDefault(A[r][c], 0) + 1);
+            count[A[r][c]]++;
         }
 
         // pq에 0을 제외한 수와 개수 담기
         for(int n=1; n<=N; n++) {
-            if(cntMap.containsKey(n)) {
-                pq.offer(new int[] {n, cntMap.get(n)});
+            if(count[n] != 0) {
+                pq.offer(new int[] {n, count[n]});
             }
         }
 
