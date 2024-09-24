@@ -39,6 +39,9 @@ public class Main {
 
         for(int r=0; r<N; r++) {
             for(int c=0; c<M; c++) {
+                // 테두리 아니면 패스
+                if(isInsideBorder(r, c)) continue;
+
                 for(int i=0; i<4; i++) {
                     n = boxDir[r][c][i];
 
@@ -50,6 +53,7 @@ public class Main {
             }
         }
 
+        
         StringBuilder ans = new StringBuilder();
         for(int number : exitNumbers) {
             ans.append(number).append(' ');
@@ -87,11 +91,17 @@ public class Main {
     }//rangeCheck
 
 
+    private static boolean isInsideBorder(int r, int c) {
+        return r > 0 && r < N-1 && c > 0 && c < M-1;
+    }//isInsideBorder
+
+
     private static int[][][] makeBoxNumbers() {
         int[][][] boxDir = new int[N][M][4];
         int num = 1;
         int dir = L;
-        
+
+
         // 왼쪽
         for(int r=0, c=0; r<N; r++) {
             boxDir[r][c][dir] = num++;
