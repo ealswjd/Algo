@@ -10,7 +10,7 @@ public class Main {
     static int N;
     static int[][] map;
     static int[][] dp;
-    static boolean[][] isP;
+    static int[][] P;
 
     
     public static void main(String[] args) throws Exception {
@@ -27,13 +27,13 @@ public class Main {
             }
         }
 
-        int P = Integer.parseInt(br.readLine());
-        while(P-- > 0) {
+        int pCnt = Integer.parseInt(br.readLine());
+        while(pCnt-- > 0) {
             st = new StringTokenizer(br.readLine());
             int r = Integer.parseInt(st.nextToken());
             int c = Integer.parseInt(st.nextToken());
 
-            isP[r][c] = true;
+            P[r][c] = 1;
         }
 
         sol();
@@ -72,14 +72,12 @@ public class Main {
             for(int c=N; c>0; c--) {
                 if(r == N && c == N) continue;
 
-                int p = isP[r][c] ? 1 : 0;
-
                 if(r+1 <= N && checked[r+1][c] && dp[r+1][c] - map[r+1][c] == dp[r][c]) {
-                    count[r][c] = count[r+1][c] + p;
+                    count[r][c] = count[r+1][c] + P[r][c];
                     checked[r][c] = true;
                 }
                 if(c+1 <= N && checked[r][c+1] && dp[r][c+1] - map[r][c+1] == dp[r][c]) {
-                    count[r][c] = Math.max(count[r][c], count[r][c+1] + p);
+                    count[r][c] = Math.max(count[r][c], count[r][c+1] + P[r][c]);
                     checked[r][c] = true;
                 }
 
@@ -93,7 +91,7 @@ public class Main {
     private static void init() {
         map = new int[N+1][N+1];
         dp = new int[N+1][N+1];
-        isP = new boolean[N+1][N+1];
+        P = new int[N+1][N+1];
     }//init
 
     
