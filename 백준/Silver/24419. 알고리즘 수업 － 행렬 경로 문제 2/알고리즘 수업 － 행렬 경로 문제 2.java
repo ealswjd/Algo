@@ -15,34 +15,27 @@ public class Main {
             br.readLine();
         }
 
-        long cnt = getCnt();
+        int cnt = getCnt();
         System.out.println(cnt + " " + N*N);
     }//main
 
-    
-    private static long getCnt() {
-        long[][] dp = new long[N][N];
 
-        for(int i=0; i<N; i++) {
-            dp[i][0] = 1;
-            dp[0][i] = 1;
-        }
+    private static int getCnt() {
+        int[][] dp = new int[N+1][N+1];
+        dp[1][1] = 1;
+        int total = 1;
 
-        for(int r=1; r<N; r++) {
-            for(int c=1; c<N; c++) {
-                dp[r][c] = (dp[r-1][c] + dp[r][c-1]) % MOD;
-            }
-        }
-
-        long total = 1;
-        for(int r=0; r<N; r++) {
-            for(int c=0; c<N; c++) {
+        for(int r=1; r<=N; r++) {
+            for(int c=1; c<=N; c++) {
+                if(r != 1 || c != 1) {
+                    dp[r][c] = (dp[r-1][c] + dp[r][c-1]) % MOD;
+                }
                 total = (total + dp[r][c]) % MOD;
             }
         }
 
-        return total % MOD;
+        return total;
     }//getCnt
 
-    
+
 }//class
