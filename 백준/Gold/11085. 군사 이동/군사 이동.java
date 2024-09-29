@@ -38,7 +38,7 @@ public class Main {
 
     private static int getWidth() {
         int min = 0;
-        list.sort(((o1, o2) -> o2[2] - o1[2]));
+        list.sort((o1, o2) -> o2[2] - o1[2]);
 
         for(int[] cur : list) {
             int start = cur[0];
