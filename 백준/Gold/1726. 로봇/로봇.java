@@ -42,13 +42,13 @@ public class Main {
     
     private static int getCnt(int[] start, int[] end) {
         Queue<int[]> q = new LinkedList<>();
-        boolean[][][][] visited = new boolean[N][M][4][4];
+        boolean[][][] visited = new boolean[N][M][4];
         int r = start[ROW];
         int c = start[COL];
         int dir = start[DIR];
         int cnt = 0;
         q.offer(new int[] {r, c, dir, cnt});
-        visited[r][c][dir][dir] = true;
+        visited[r][c][dir] = true;
 
         int[] cur;
         while(!q.isEmpty()) {
@@ -64,22 +64,22 @@ public class Main {
                 int nr = r + (dr[dir] * k);
                 int nc = c + (dc[dir] * k);
                 if(rangeCheck(nr, nc)) break;
-                if(visited[nr][nc][dir][dir]) continue;
+                if(visited[nr][nc][dir]) continue;
                 q.offer(new int[] {nr, nc, dir, cnt+1});
-                visited[nr][nc][dir][dir] = true;
+                visited[nr][nc][dir] = true;
             }
 
             int left = leftDir[dir];
             int right = rightDir[dir];
 
-            if(!visited[r][c][dir][left]) {
+            if(!visited[r][c][left]) {
                 q.offer(new int[] {r, c, left, cnt+1});
-                visited[r][c][dir][left] = true;
+                visited[r][c][left] = true;
             }
 
-            if(!visited[r][c][dir][right]){
+            if(!visited[r][c][right]){
                 q.offer(new int[] {r, c, right, cnt+1});
-                visited[r][c][dir][right] = true;
+                visited[r][c][right] = true;
             }
 
         }
