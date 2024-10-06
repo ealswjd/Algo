@@ -13,8 +13,8 @@ public class Main {
     static int[] dr = {0, 0, -1, 1};
     static int[] dc = {1, -1, 0, 0};
     static int[] to = {0, L, R, D, U};
-    static  List<int[]> checkList; // 조사 대상 위치
-    static  List<int[]> heaterList; // 온풍기 위치
+    static List<int[]> checkList; // 조사 대상 위치
+    static List<int[]> heaterList; // 온풍기 위치
 
     public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -146,19 +146,15 @@ public class Main {
 
     
     private static boolean isPossible(int r, int c, int nr, int nc, int dir, int d) {
+        if(d == 1) return wallCheck(r, c, dir);
+        
         if(dir == R || dir == L) {
-            if(d == 1) return wallCheck(r, c, dir);
-            else {
-                if(d == 0) return wallCheck(nr, nc, to[dir]) && wallCheck(r, c, U);
-                else return wallCheck(nr, nc, to[dir]) && wallCheck(r, c, D);
-            }
+            if(d == 0) return wallCheck(nr, nc, to[dir]) && wallCheck(r, c, U);
+            else return wallCheck(nr, nc, to[dir]) && wallCheck(r, c, D);
         }
         else {
-            if(d == 1) return wallCheck(r, c, dir);
-            else {
-                if(d == 0) return wallCheck(nr, nc, to[dir]) && wallCheck(r, c, L);
-                else return wallCheck(nr, nc, to[dir]) && wallCheck(r, c, R);
-            }
+            if(d == 0) return wallCheck(nr, nc, to[dir]) && wallCheck(r, c, L);
+            else return wallCheck(nr, nc, to[dir]) && wallCheck(r, c, R);
         }
     }//isPossible
 
@@ -167,6 +163,7 @@ public class Main {
         return r >= 0 && r < N && c >= 0 && c < M;
     }//rangeCheck
 
+    
     private static boolean wallCheck(int r, int c, int dir) {
         return (map[r][c][1] & (1 << dir)) == 0;
     }//wallCheck
