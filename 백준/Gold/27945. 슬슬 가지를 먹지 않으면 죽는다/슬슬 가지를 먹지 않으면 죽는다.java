@@ -22,6 +22,8 @@ public class Main {
             int from = Integer.parseInt(st.nextToken());
             int to = Integer.parseInt(st.nextToken());
             int day = Integer.parseInt(st.nextToken()); // 노점이 여는 날
+            
+            if(day > N) continue;
 
             list.add(new int[] {from, to, day});
         }
