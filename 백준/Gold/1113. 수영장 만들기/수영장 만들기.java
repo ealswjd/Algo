@@ -8,7 +8,7 @@ public class Main {
     private static int N, M; // 행, 열
     private static int[][] map; // 수영장
     private static boolean[][] checked; // 물 채웠는지 확인
-    private static int sum; 
+    private static int sum, max, min;
     private static boolean flag;
     private static int[] dr = {1, 0, -1, 0};
     private static int[] dc = {0, 1, 0, -1};
@@ -23,7 +23,7 @@ public class Main {
     private static void getResult() {
         int total = 0;
 
-        for(int h=9; h>1; h--) {
+        for(int h=max; h>=min; h--) {
             for(int r=1; r<N-1; r++) {
                 for(int c=1; c<M-1; c++) {
                     if(checked[r][c]) continue;
@@ -98,11 +98,14 @@ public class Main {
 
         map = new int[N][M];
         checked = new boolean[N][M];
+        min = 9;
 
         for(int i=0; i<N; i++) {
             char[] row = br.readLine().toCharArray();
             for(int j=0; j<M; j++) {
                 map[i][j] = row[j] - '0';
+                max = Math.max(max, map[i][j]);
+                min = Math.min(min, map[i][j]);
             }
         }
     }//init
