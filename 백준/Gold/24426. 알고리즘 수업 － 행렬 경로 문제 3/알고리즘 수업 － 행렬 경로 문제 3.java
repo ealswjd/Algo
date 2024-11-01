@@ -1,49 +1,38 @@
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.StringTokenizer;
 
-// https://www.acmicpc.net/problem/24426
+/*
+ https://www.acmicpc.net/problem/24426
+ 알고리즘 수업 - 행렬 경로 문제 3
+
+ 중간 원소 Y를 거쳐서 가장 높은 점수
+ 중간 원소 Y를 거치지 않고 가장 높은 점수
+*/
 public class Main {
-    static int N; // 행렬 크기
-    static int[][] map; // 행렬
+    private static int N;
+    private static int yr, yc;
+    private static int[][] map;
 
-    public static void main(String[] args) throws Exception {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        N = Integer.parseInt(br.readLine()); // 행렬 크기
-        map = new int[N+1][N+1];
-
-        StringTokenizer st;
-        for(int i=1; i<=N; i++) {
-            st = new StringTokenizer(br.readLine());
-            for(int j=1; j<=N; j++) {
-                map[i][j] = Integer.parseInt(st.nextToken());
-            }
-        }
-
-        // 중간 원소 Y의 행 번호 r과 열 번호 c
-        st = new StringTokenizer(br.readLine());
-        int r = Integer.parseInt(st.nextToken());
-        int c = Integer.parseInt(st.nextToken());
-
-        getMaxScore(new int[] {r, c});
-        
+    
+    public static void main(String[] args) throws IOException {
+        init();
+        getScore();
     }//main
 
     
-    private static void getMaxScore(int[] Y) {
-        int yr = Y[0];
-        int yc = Y[1];
-        int[][] dp = new int[N+1][N+1];        // 전체 경로 점수
-        int[][] fromY = new int[N+1][N+1];     // 중간 원소 y 포함 경로 점수
-        int[][] excludeY = new int[N+1][N+1];  // 중간 원소 y 제외 경로 점수
+    private static void getScore() {
+        int[][] dp = new int[N+1][N+1];
+        int[][] fromY = new int[N+1][N+1];
+        int[][] excludeY = new int[N+1][N+1];
         excludeY[1][1] = map[1][1];
 
         for(int r=1; r<=N; r++) {
             for(int c=1; c<=N; c++) {
                 dp[r][c] = Math.max(dp[r-1][c], dp[r][c-1]) + map[r][c];
 
-                if(r == 1 && c == 1) continue;
-                if(r == yr && c == yc) continue;
+                if((r == 1 && c == 1) || (r == yr && c == yc)) continue;
 
                 int fromTop = excludeY[r-1][c] > 0 ? excludeY[r-1][c] + map[r][c] : 0;
                 int fromLeft = excludeY[r][c-1] > 0 ? excludeY[r][c-1] + map[r][c] : 0;
@@ -56,14 +45,37 @@ public class Main {
         for(int r=yr; r<=N; r++) {
             for(int c=yc; c<=N; c++) {
                 if(r == yr && c == yc) continue;
+
                 fromY[r][c] = Math.max(fromY[r-1][c], fromY[r][c-1]) + map[r][c];
             }
         }
 
 
-        // 중간 원소 y 거친 최고 점수, y 거치지 않은 최고 점수
-        System.out.print(fromY[N][N] + " " + excludeY[N][N]);
-    }//getMaxScore
+        // 1. Y를 거쳐서 가장 높은 점수   2. Y를 거치지 않고 가장 높은 점수
+        System.out.printf("%d %d", fromY[N][N], excludeY[N][N]);
+    }//getScore
+
+    
+    private static void init() throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        N = Integer.parseInt(br.readLine());
+        map = new int[N+1][N+1];
+
+        StringTokenizer st;
+        for(int i=1; i<=N; i++) {
+            st = new StringTokenizer(br.readLine());
+            for(int j=1; j<=N; j++) {
+                map[i][j] = Integer.parseInt(st.nextToken());
+            }
+        }
+
+        // 중간 원소 Y의 행 번호 r과 열 번호 c가 주어진다.
+        st = new StringTokenizer(br.readLine());
+        yr = Integer.parseInt(st.nextToken());
+        yc = Integer.parseInt(st.nextToken());
+
+        br.close();
+    }//init
 
     
 }//class
