@@ -8,7 +8,7 @@ public class Main {
     private static final int A = 0, B = 1, C = 2;
     private static int N;
     private static int[] parent;
-    private static List<int[]> computerLine;
+    private static PriorityQueue<int[]> computerLine;
 
     
     public static void main(String[] args) throws IOException {
@@ -23,7 +23,8 @@ public class Main {
         int cost = 0; // 총 비용
         int cnt = 0;  // 총 연결 개수
 
-        for(int[] line : computerLine) {
+        while(!computerLine.isEmpty()) {
+            int[] line = computerLine.poll();
             // a 컴퓨터와 b 컴퓨터를 연결하는데 비용이 c
             int a = line[A];
             int b = line[B];
@@ -64,8 +65,9 @@ public class Main {
         N = Integer.parseInt(br.readLine()); // 컴퓨터의 수
         int M = Integer.parseInt(br.readLine()); // 연결할 수 있는 선의 수
 
+        // 가격 기준 오름차순 정렬
+        computerLine = new PriorityQueue<>(Comparator.comparingInt(o -> o[C]));
         parent = new int[N+1];
-        computerLine = new ArrayList<>();
 
         for(int i=0; i<=N; i++) {
             parent[i] = i;
@@ -82,9 +84,6 @@ public class Main {
 
             computerLine.add(new int[] {a, b, c});
         }
-
-        // 가격 기준 오름차순 정렬
-        computerLine.sort(Comparator.comparingInt(o -> o[C]));
 
         br.close();
     }//init
