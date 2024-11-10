@@ -15,8 +15,9 @@ public class Main {
     private static final int[] dc = {0, 0, -1, 1, -1, -2, -2, -1, 1, 2, 2, 1};
     private static int K, N, M; // 말처럼 움직일 수 있는 횟수, 행, 열
     private static int[][] map; // 격자판
+    private static int[] count;
 
-    
+
     public static void main(String[] args) throws IOException {
         init();
 
@@ -51,7 +52,7 @@ public class Main {
             for(int i=0; i<d; i++) {
                 int nr = r + dr[i];
                 int nc = c + dc[i];
-                int nCnt = kCnt - (i >= 4 ? 1 : 0);
+                int nCnt = kCnt - count[i];
 
                 if(rangeCheck(nr, nc) || visited[nr][nc][nCnt]) continue;
 
@@ -85,6 +86,9 @@ public class Main {
                 map[i][j] = Integer.parseInt(st.nextToken());
             }
         }
+
+        count = new int[12];
+        for(int i=4; i<12; i++) count[i] = 1;
 
         br.close();
     }//init
