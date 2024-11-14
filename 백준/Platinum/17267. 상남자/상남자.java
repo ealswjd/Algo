@@ -7,11 +7,11 @@ import java.util.StringTokenizer;
 
 // https://www.acmicpc.net/problem/17267
 public class Main {
-    private static final int WALL = 1;
+    private static final char WALL = '1';
     private static int N, M; // 지도의 행과 열 N, M
     private static int L, R; // 왼쪽과 오른쪽으로 갈수 있는 최대 횟수
     private static int sr, sc;
-    private static int[][] map;
+    private static char[][] map;
 
 
     public static void main(String[] args) throws IOException {
@@ -93,17 +93,19 @@ public class Main {
         R = Integer.parseInt(st.nextToken());
 
         // 지도
-        map = new int[N][M];
+        map = new char[N][M];
+        sr = -1;
         for(int i=0; i<N; i++) {
-            char[] tmp = br.readLine().toCharArray();
+            map[i] = br.readLine().toCharArray();
+
+            if(sr != -1) continue;
             for(int j=0; j<M; j++) {
-                map[i][j] = tmp[j] - '0';
-                if(map[i][j] == 2) {
+                if(map[i][j] == '2') {
                     sr = i;
                     sc = j;
-                    map[i][j] = 0;
                 }
             }
+
         }
 
         br.close();
