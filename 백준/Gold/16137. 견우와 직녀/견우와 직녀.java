@@ -8,7 +8,7 @@ import java.util.StringTokenizer;
 
 // https://www.acmicpc.net/problem/16137
 public class Main {
-    private static final int CLIFF = 0;
+    private static final int CLIFF = 0; // 절벽
     private static final int[] dr = {-1, 0, 1, 0};
     private static final int[] dc = {0, -1, 0, 1};
     private static int N, M; // 행과 열의 크기, 오작교의 주기
@@ -79,7 +79,7 @@ public class Main {
 
                     // 오작교를 지을 예정이 없는 절벽
                     if(map[nr][nc] == CLIFF) {
-                        // 오작교 설치했거나 교차 지점이거나 이전에 건넜는지 확인
+                        // 오작교 설치 여부, 교차 지점 확인
                         if(m > 0 || isCross[nr][nc]) continue;
                         nm = 1; // 오작교 설치
                     }
