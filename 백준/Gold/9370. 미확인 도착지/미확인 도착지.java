@@ -31,8 +31,6 @@ public class Main {
         int[] gCost = dijkstra(G);
         int[] hCost = dijkstra(H);
 
-        boolean[] isTarget = new boolean[N+1]; // 목적지
-
         // 가능한 목적지 탐색
         for(int city : candidate) {
             int gToH = sCost[G] + gCost[H] + hCost[city];
@@ -40,12 +38,7 @@ public class Main {
 
             int min = Math.min(gToH, hToG);
 
-            if(min == sCost[city]) isTarget[city] = true;
-        }
-
-        // 가능한 목적지들을 공백으로 분리시켜 오름차순
-        for(int i=1; i<=N; i++) {
-            if(isTarget[i]) ans.append(i).append(' ');
+            if(min == sCost[city]) ans.append(city).append(' ');
         }
 
         ans.append('\n');
@@ -116,6 +109,7 @@ public class Main {
             candidate[i] = x;
         }
 
+        Arrays.sort(candidate);
     }//init
 
 
