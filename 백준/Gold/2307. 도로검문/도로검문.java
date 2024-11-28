@@ -56,6 +56,7 @@ public class Main {
             time = cur[1]; // 시간
 
             if(city == end) return time;
+            if(minCost[city] < time) continue;
 
             for(int[] next : roadList.get(city)) {
                 int nextCity = next[0];
