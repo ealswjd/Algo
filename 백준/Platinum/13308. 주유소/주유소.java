@@ -5,7 +5,7 @@ import java.util.*;
 
 // https://www.acmicpc.net/problem/13308
 public class Main {
-    private static final int INF = 1_000_000_000;
+    private static final long INF = 10_000_000_004L;
     private static int N; // 도시의 수
     private static int maxCost;
     private static int[] costArr;
@@ -15,26 +15,25 @@ public class Main {
     public static void main(String[] args) throws IOException {
         init();
 
-        int minCost = getMinCost();
+        long minCost = getMinCost();
         System.out.print(minCost);
     }//main
 
 
-    private static int getMinCost() {
+    private static long getMinCost() {
         PriorityQueue<City> pq = new PriorityQueue<>();
-        int[][] minCost = new int[N+1][maxCost+1];
+        long[][] minCost = new long[N+1][maxCost+1];
         for(int i=1; i<=N; i++) {
             Arrays.fill(minCost[i], INF);
         }
 
-        int cost = costArr[1];
-        pq.offer(new City(1, 0, 0, cost));
-        minCost[1][cost] = 0;
+        pq.offer(new City(1, 0, 0, costArr[1]));
+        minCost[1][costArr[1]] = 0;
 
         while(!pq.isEmpty()) {
             City cur = pq.poll();
             int from = cur.to;
-            cost = cur.cost;
+            long cost = cur.cost;
             int min = cur.min;
 
             if(minCost[from][min] < cost) continue;
@@ -43,7 +42,7 @@ public class Main {
             for(City next : list.get(from)) {
                 int to = next.to;
                 int nextDist = next.dist;
-                int nextCost = cost + nextDist * min;
+                long nextCost = cost + (long) nextDist * min;
                 int nextMin = Math.min(min, costArr[to]);
 
                 if(minCost[to][nextMin] > nextCost) {
@@ -53,7 +52,7 @@ public class Main {
             }
         }
 
-        int result = INF;
+        long result = INF;
         for(int i=1; i<=maxCost; i++) {
             result = Math.min(result, minCost[N][i]);
         }
@@ -100,7 +99,7 @@ public class Main {
     private static class City implements Comparable<City> {
         int to;
         int dist;
-        int cost;
+        long cost;
         int min;
 
         public City(int to, int dist) {
@@ -108,7 +107,7 @@ public class Main {
             this.dist = dist;
         }
 
-        public City(int to, int dist, int cost, int min) {
+        public City(int to, int dist, long cost, int min) {
             this(to, dist);
             this.cost = cost;
             this.min = min;
@@ -116,7 +115,7 @@ public class Main {
 
         @Override
         public int compareTo(City o) {
-            return Integer.compare(this.cost, o.cost);
+            return Long.compare(this.cost, o.cost);
         }
     }//City
 
