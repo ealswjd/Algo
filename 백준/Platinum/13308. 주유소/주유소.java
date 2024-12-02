@@ -5,7 +5,7 @@ import java.util.*;
 
 // https://www.acmicpc.net/problem/13308
 public class Main {
-    private static final long INF = 10_000_000_004L;
+    private static final long INF = Long.MAX_VALUE;
     private static int N; // 도시의 수
     private static int maxCost;
     private static int[] costArr;
