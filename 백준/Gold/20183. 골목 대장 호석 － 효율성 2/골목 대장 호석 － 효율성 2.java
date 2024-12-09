@@ -23,6 +23,7 @@ public class Main {
     private static int getMinCost() {
         PriorityQueue<Node> pq = new PriorityQueue<>();
         boolean[] visited = new boolean[N+1];
+        long[] costArr = new long[N+1];
         int[] result = new int[N+1];
         Arrays.fill(result, INF);
 
@@ -36,6 +37,7 @@ public class Main {
             int maxCost = node.maxCost;
 
             if(visited[cur]) continue;
+            if(cost == 0 || cur == E) continue;
             visited[cur] = true;
 
             for(Node next : list.get(cur)) {
@@ -46,6 +48,11 @@ public class Main {
 
                 if(result[next.to] > max) {
                     result[next.to] = max;
+                    costArr[next.to] = nextCost;
+                    pq.offer(new Node(next.to, nextCost, max));
+                }
+                else if(result[next.to] == max && costArr[next.to] < nextCost) {
+                    costArr[next.to] = nextCost;
                     pq.offer(new Node(next.to, nextCost, max));
                 }
             }
@@ -88,12 +95,10 @@ public class Main {
         int to;
         long cost;
         int maxCost;
-        
         public Node(int to, long cost) {
             this.to = to;
             this.cost = cost;
         }
-        
         public Node(int to, long cost, int maxCost) {
             this(to, cost);
             this.maxCost = maxCost;
@@ -101,7 +106,10 @@ public class Main {
 
         @Override
         public int compareTo(Node o) {
-            return o.maxCost - this.maxCost;
+            if(this.maxCost == o.maxCost) {
+                return Long.compare(o.cost, this.cost);
+            }
+            return this.maxCost - o.maxCost;
         }
     }//Node
 
