@@ -24,21 +24,22 @@ public class Main {
 
         for(int i=0; i<=N; i++) {
             Arrays.fill(cost[i], INF);
+            map[i][0] = 2222;
+            map[0][i] = 2222;
         }
 
-        cost[1][1] = 0;
+        cost[0][1] = 0;
+        cost[1][0] = 0;
 
         for(int r=1; r<=N; r++) {
             for(int c=1; c<=N; c++) {
-                if(r == 1 && c == 1) continue;
+                int fromTop = cost[r-1][c];  // 위
+                int fromLeft = cost[r][c-1]; // 왼쪽
 
-                int fromTop = cost[r-1][c];
-                int fromLeft = cost[r][c-1];
-
-                if(r > 1 && map[r-1][c] <= map[r][c]) {
+                if(map[r-1][c] <= map[r][c]) {
                     fromTop += map[r][c] - map[r-1][c] + 1;
                 }
-                if(c > 1 && map[r][c-1] <= map[r][c]) {
+                if(map[r][c-1] <= map[r][c]) {
                     fromLeft += map[r][c] - map[r][c-1] + 1;
                 }
 
