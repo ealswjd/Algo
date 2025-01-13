@@ -32,8 +32,8 @@ public class Main {
 
         for(char order : orders) {
             if(order == 'F') moveForward(user);
-            else if(order == 'R') turnRight(user);
-            else turnLeft(user);
+            else if(order == 'R') turn(user, right);
+            else turn(user, left);
 
             moveZombi();
 
@@ -56,8 +56,8 @@ public class Main {
         if(rangeCheck(nr, nc)) {
             // 좀비면 뒤로 회전
             if(user.isZombi) {
-                turnRight(user);
-                turnRight(user);
+                turn(user, right);
+                turn(user, right);
             }
             return;
         }
@@ -96,18 +96,11 @@ public class Main {
     }//switchOn
 
 
-    private static void turnRight(User user) {
-        int dir = right[user.dir];
+    private static void turn(User user, int[] newDir) {
+        int dir = newDir[user.dir];
 
         user.setUser(user.r, user.c, dir);
     }//turnRight
-
-
-    private static void turnLeft(User user) {
-        int dir = left[user.dir];
-
-        user.setUser(user.r, user.c, dir);
-    }//turnLeft
 
 
     private static void moveZombi() {
@@ -186,6 +179,7 @@ public class Main {
             this.c = c;
             this.dir = dir;
         }
+
     }//User
 
 
