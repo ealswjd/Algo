@@ -98,27 +98,16 @@ public class Main {
 
     private static void turn(User user, int[] newDir) {
         int dir = newDir[user.dir];
-
         user.setUser(user.r, user.c, dir);
     }//turnRight
 
 
     private static void moveZombi() {
-        int r, c;
-
+        
         for(User zombi : zombiList) {
-            r = zombi.r;
-            c = zombi.c;
-
             moveForward(zombi);
 
-            map[r][c] = EMPTY;
-            map[zombi.r][zombi.c] = ZOMBI;
-
-            if(check()) {
-                isFail = true;
-                return;
-            }
+            if(isFail) return;
         }
 
     }//moveZombi
@@ -179,7 +168,6 @@ public class Main {
             this.c = c;
             this.dir = dir;
         }
-
     }//User
 
 
