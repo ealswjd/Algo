@@ -34,8 +34,12 @@ public class Main {
             }
         }
 
+        long result = 0;
+        for(int i=1; i<=N; i++) {
+            result = Math.max(result, max[i]);
+        }
 
-        return max[N];
+        return result;
     }//getMax
 
 
