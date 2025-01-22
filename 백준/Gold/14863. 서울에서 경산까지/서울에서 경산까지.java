@@ -1,7 +1,6 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.Arrays;
 import java.util.StringTokenizer;
 
 // https://www.acmicpc.net/problem/14863
@@ -10,37 +9,46 @@ public class Main {
     private static int N, K;
     private static int[][] walk; // 도보 이동 정보
     private static int[][] bike; // 자전거 이동 정보
-    private static int[][] dp; // 최대 모금액
 
 
     public static void main(String[] args) throws IOException {
         init();
 
-        int max = move(1, 0);
+        int max = getMax();
         System.out.print(max);
     }//main
 
 
-    private static int move(int n, int k) {
-        if(n > N) return 0;
-        if(dp[n][k] != -1) return dp[n][k];
+    private static int getMax() {
+        int[][] dp = new int[N + 1][K + 1];
 
-        int walkMoney = -1; // 도보 모금액
-        int bikeMoney = -1; // 자전거 모금액
+        dp[1][walk[1][TIME]] = walk[1][MONEY];
+        dp[1][bike[1][TIME]] = Math.max(dp[1][bike[1][TIME]], bike[1][MONEY]);
 
-        // 도보 이동
-        if(walk[n][TIME] + k <= K) {
-            walkMoney = move(n + 1, walk[n][TIME] + k);
-            if(walkMoney != -1) walkMoney += walk[n][MONEY];
+        for(int n=1; n<=N; n++) {
+            for(int k=1; k<=K; k++) {
+                if(dp[n - 1][k] == 0) continue;
+
+                // 도보
+                if(walk[n][TIME] + k <= K) {
+                    int time = walk[n][TIME] + k;
+                    dp[n][time] = Math.max(dp[n][time], dp[n - 1][k] + walk[n][MONEY]);
+                }
+                // 자전거
+                if(bike[n][TIME] + k <= K) {
+                    int time = bike[n][TIME] + k;
+                    dp[n][time] = Math.max(dp[n][time], dp[n - 1][k] + bike[n][MONEY]);
+                }
+            }
         }
-        // 자전거 이동
-        if(bike[n][TIME] + k <= K) {
-            bikeMoney = move(n + 1, bike[n][TIME] + k);
-            if(bikeMoney != -1) bikeMoney += bike[n][MONEY];
+
+        int max = 0;
+        for(int k=0; k<=K; k++) {
+            max = Math.max(max, dp[N][k]);
         }
 
-        return dp[n][k] = Math.max(walkMoney, bikeMoney);
-    }//move
+        return max;
+    }//getMax
 
 
     private static void init() throws IOException {
@@ -51,10 +59,8 @@ public class Main {
 
         walk = new int[N+1][2]; // 도보 이동 정보
         bike = new int[N+1][2]; // 자전거 이동 정보
-        dp = new int[N+1][K+1]; // 최대 모금액
 
         for(int i=1; i<=N; i++) {
-            Arrays.fill(dp[i], -1);
             st = new StringTokenizer(br.readLine());
             // 도보
             walk[i][TIME] = Integer.parseInt(st.nextToken()); // 걸리는 시간
