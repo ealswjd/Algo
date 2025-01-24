@@ -20,41 +20,27 @@ public class Main {
 
 
     private static int getHeight() {
-        int height = N; // 가로등의 최소 높이
         int start = 1;
         int end = N;
         int mid;
 
-        while(start <= end) {
-            mid = (start + end) / 2;
+        while(start < end) {
+            mid = (start + end) >> 1;
 
-            if(isPossible(mid)) {
-                end = mid - 1;
-                height = mid;
-            }
-            else {
-                start = mid + 1;
-            }
+            if(isPossible(mid)) end = mid;
+            else start = mid + 1;
         }
 
-        return height;
+        return end;
     }//getHeight
 
 
     private static boolean isPossible(int height) {
-        int start = positions[0] - height; // 불빛 시작
-        int end = positions[0] + height; // 불빛 끝
+        int end = 0; // 불빛 끝
 
-        // 0부터 밝아야 함
-        if(start > 0) return false;
-
-        for(int i=1; i<M; i++) {
-            int curStart = positions[i] - height;
-            int curEnd = positions[i] + height;
-
-            // 중간에 공백 있으면 불가능
-            if(curStart > end) return false;
-            end = curEnd;
+        for(int i=0; i<M; i++) {
+            if(positions[i] - height > end) return false;
+            end = positions[i] + height;
         }
 
         // 끝까지 밝힐 수 있는지 확인
