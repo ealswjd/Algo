@@ -1,7 +1,6 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.Arrays;
 import java.util.StringTokenizer;
 
 // https://www.acmicpc.net/problem/16401
@@ -9,6 +8,8 @@ public class Main {
     private static int N; // 과자의 수
     private static int M; // 조카의 수
     private static int[] length; // 과자의 길이
+    private static int sum;
+    private static int maxLen;
 
 
     public static void main(String[] args) throws IOException {
@@ -20,9 +21,11 @@ public class Main {
 
 
     private static int getMaxLength() {
+        if(sum < M) return 0;
+
         int max = 0;
         int start = 1;
-        int end = length[N-1];
+        int end = maxLen;
         int mid;
 
         while(start <= end) {
@@ -46,11 +49,7 @@ public class Main {
 
         for(int len : length) {
             if(len < mid) continue;
-
-            while(len - mid >= 0) {
-                len -= mid;
-                if(++cnt >= M) return true;
-            }
+            cnt += len / mid;
         }
 
         return cnt >= M;
@@ -68,9 +67,10 @@ public class Main {
         st = new StringTokenizer(br.readLine());
         for(int i=0; i<N; i++) {
             length[i] = Integer.parseInt(st.nextToken());
+            sum += length[i];
+            maxLen = Math.max(maxLen, length[i]);
         }
 
-        Arrays.sort(length);
         br.close();
     }//init
 
