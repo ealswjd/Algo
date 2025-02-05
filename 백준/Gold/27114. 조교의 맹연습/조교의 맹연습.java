@@ -21,8 +21,8 @@ public class Main {
 
     private static int getCnt() {
         int[][] dp = new int[K+1][4]; // 제식 수행 횟수의 최솟값
-        int INF = K+1;
-        int p, nextD;
+        int INF = K + 1;
+        int nextK, nextD;
 
         for(int i=0; i<=K; i++) {
             Arrays.fill(dp[i], INF);
@@ -34,16 +34,14 @@ public class Main {
                 if(dp[k][d] == INF) continue;
 
                 for(int i=0; i<3; i++) {
-                    // 에너지 초과
                     if(k + cost[i] > K) continue;
 
-                    p = cost[i]; // 회전 에너지
-                    nextD = (d + dir[i]) % 4; // 다음 방향
+                    nextK = k + cost[i];
+                    nextD = (d + dir[i]) % 4;
 
-                    dp[k + p][nextD] = Math.min(dp[k + p][nextD], dp[k][d] + 1);
+                    dp[nextK][nextD] = Math.min(dp[nextK][nextD], dp[k][d] + 1);
                 }
             }
-
         }
 
         return dp[K][0] != INF ? dp[K][0] : -1;
@@ -51,10 +49,9 @@ public class Main {
 
 
     private static void init() throws IOException {
-        cost = new int[3];
-        
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        StringTokenizer st = new StringTokenizer(br.readLine());      
+        StringTokenizer st = new StringTokenizer(br.readLine());
+        cost = new int[3];
         cost[0] = Integer.parseInt(st.nextToken()); // 좌로 돌아
         cost[1] = Integer.parseInt(st.nextToken()); // 우로 돌아
         cost[2] = Integer.parseInt(st.nextToken()); // 뒤로 돌아
