@@ -23,7 +23,6 @@ public class Main {
 
 
     private static void findMax(int r, int c, int prev, int cnt, int total) {
-        if(cnt > P) return;
         max = Math.max(max, total);
         if(cnt == P) return;
 
@@ -36,11 +35,13 @@ public class Main {
 
             nextCnt = cnt + 1;
             if(prev != -1 && prev != i) nextCnt++;
+            if(nextCnt > P) continue;
 
             visited[nr][nc] = true;
             findMax(nr, nc, i, nextCnt, total + map[nr][nc]);
             visited[nr][nc] = false;
         }
+        
     }//findMax
 
 
