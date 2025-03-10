@@ -23,19 +23,17 @@ public class Main {
 
 
     private static int dfs(int cur) {
-        if(visited[cur]) return 0;
         visited[cur] = true;
 
-        int max = 0;
-
+        int dist = 0;
         for(int next : list.get(cur)) {
             if(visited[next]) continue;
-            max = Math.max(max, dfs(next));
+            dist = Math.max(dist, dfs(next));
         }
 
-        if(cur != S && max >= D) minDist += 2;
+        if(cur != S && dist >= D) minDist += 2;
 
-        return max + 1;
+        return dist + 1;
     }//dfs
 
 
