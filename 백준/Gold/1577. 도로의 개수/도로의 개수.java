@@ -59,6 +59,7 @@ public class Main {
             Arrays.fill(dp[i], -1);
         }
 
+        int x, y;
         while(K-- > 0) {
             st = new StringTokenizer(br.readLine());
             // 공사중인 도로의 정보가 a b c d와 같이 주어진다.
@@ -68,12 +69,12 @@ public class Main {
             int d = Integer.parseInt(st.nextToken());
 
             if(a != c) {
-                if(a < c) impossible[a][b][0] = true;
-                else impossible[c][d][0] = true;
+                x = Math.min(a, c);
+                impossible[x][b][0] = true;
             }
             else {
-                if(b < d) impossible[a][b][1] = true;
-                else impossible[c][d][1] = true;
+                y = Math.min(b, d);
+                impossible[a][y][1] = true;
             }
         }
 
