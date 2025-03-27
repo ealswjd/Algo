@@ -21,15 +21,12 @@ public class Main {
         PriorityQueue<int[]> pq = new PriorityQueue<>(Comparator.comparingInt(o -> o[2]));
         boolean[][] visited = new boolean[N][M];
         int result = 0;
-        int totalCnt = N * M;
-        int cnt = 0;
 
         for(int i=0; i<N; i++) {
             for(int j=0; j<M; j++) {
                 if(isOutLine(i, j)) {
                     pq.offer(new int[] {i, j, map[i][j]});
                     visited[i][j] = true;
-                    cnt++;
                 }
             }
         }
@@ -42,8 +39,6 @@ public class Main {
             c = cur[1];
             h = cur[2];
 
-            if(cnt == totalCnt) break;
-
             for(int i=0; i<4; i++) {
                 int nr = r + dr[i];
                 int nc = c + dc[i];
@@ -55,7 +50,6 @@ public class Main {
 
                 pq.offer(new int[] {nr, nc, Math.max(h, map[nr][nc])});
                 visited[nr][nc] = true;
-                cnt++;
             }
         }
 
