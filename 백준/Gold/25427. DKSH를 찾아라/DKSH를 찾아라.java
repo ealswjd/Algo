@@ -17,13 +17,13 @@ public class Main {
     public static void main(String[] args) throws IOException {
         init();
 
-        int cnt = getCnt();
+        long cnt = getCnt();
         System.out.print(cnt);
     }//main
 
 
-    private static int getCnt() {
-        int[] count = new int[H+1];
+    private static long getCnt() {
+        long[] count = new long[H+1];
         int cur;
 
         for(int i=0; i<N; i++) {
