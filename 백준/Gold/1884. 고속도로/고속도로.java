@@ -36,7 +36,6 @@ public class Main {
     private static int getMinLen() {
         PriorityQueue<Road> pq = new PriorityQueue<>();
         int[][] minDist = new int[K+1][N+1]; // k로 n까지 갈 수 있는 가장 짧은 길이
-        int min = INF; // 제일 짧은 경로의 길이
         int city = 1;  // 도시
         int len = 0;   // 길이
         int cost = 0;  // 비용
@@ -61,8 +60,7 @@ public class Main {
             }
             // 집 도착
             if(city == N) {
-                min = Math.min(min, len);
-                continue;
+                return len;
             }
 
             for(Road next : roadList.get(city)) {
@@ -79,8 +77,8 @@ public class Main {
 
         }
 
-        // 제일 짧은 경로의 길이를 출력. 가능한 경로가 없을 때에는 -1을 출력
-        return min == INF ? -1 : min;
+        // 가능한 경로가 없을 때에는 -1을 출력
+        return -1;
     }//getMinLen
 
 
