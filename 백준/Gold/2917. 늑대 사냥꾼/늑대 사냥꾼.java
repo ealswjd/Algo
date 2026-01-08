@@ -46,7 +46,7 @@ public class Main {
 
                 // 이동하는 모든 칸에서 나무와 거리의 최솟값
                 int nDist = Math.min(dist, distMap[nr][nc]);
-                
+
                 if (maxDist[nr][nc] < nDist) {
                     maxDist[nr][nc] = nDist;
                     pq.offer(new Position(nr, nc, nDist));
@@ -73,9 +73,14 @@ public class Main {
         char[][] map = new char[R][C]; // 숲의 지도
         distMap = new int[R][C]; // 가장 가까운 나무와의 거리
 
+        Queue<Position> q = new LinkedList<>();
+        boolean[][] visited = new boolean[R][C];
+
         for(int r=0; r<R; r++) {
             map[r] = br.readLine().toCharArray();
             for(int c=0; c<C; c++) {
+                if (map[r][c] == '.') continue;
+
                 if (map[r][c] == 'V') { // 현우
                     map[r][c] = '.';
                     vr = r;
@@ -84,29 +89,21 @@ public class Main {
                     map[r][c] = '.';
                     er = r;
                     ec = c;
-                }
-            }
-        }
-
-        br.close();
-        bfs(map); // 가장 가까운 나무의 거리 구하기
-    }//init
-    
-
-    private static void bfs(char[][] map) {
-        Queue<Position> q = new LinkedList<>();
-        boolean[][] visited = new boolean[R][C];
-
-        for(int r=0; r<R; r++) {
-            for(int c=0; c<C; c++) {
-                if (map[r][c] == '+') { // 나무
+                } else {
                     q.offer(new Position(r, c, 0));
                     visited[r][c] = true;
                 }
             }
         }
 
+        br.close();
+        bfs(q, visited); // 가장 가까운 나무의 거리 구하기
+    }//init
+    
+
+    private static void bfs(Queue<Position> q, boolean[][] visited) {
         Position cur;
+
         while(!q.isEmpty()) {
             cur = q.poll();
             distMap[cur.r][cur.c] = cur.dist;
@@ -124,8 +121,8 @@ public class Main {
             }
         }
     }//bfs
-    
 
+    
     private static class Position implements Comparable<Position> {
         int r;
         int c;
@@ -142,6 +139,6 @@ public class Main {
             return p.dist - this.dist;
         }
     }//Position
-    
 
+    
 }//class
