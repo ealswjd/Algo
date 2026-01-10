@@ -2,11 +2,14 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.Queue;
 import java.util.StringTokenizer;
 
 // https://www.acmicpc.net/problem/2253
 public class Main {
-    private static final int X = 150, MAX = 10001;
+    private static final int MAX_N = 10000, MAX = MAX_N + 1;
+    private static final int X = (int) Math.sqrt(MAX_N * 2) + 5;
     private static int N;
     private static boolean[] isSmall;
 
@@ -17,6 +20,42 @@ public class Main {
 
         System.out.print(result);
     }//main
+    
+
+    private static int bfs() {
+        if (isSmall[2]) return -1;
+
+        Queue<int[]> q = new LinkedList<>();
+        boolean[][] visited = new boolean[N+1][X];
+
+        int num = 2, x = 1, cnt = 1;
+        q.offer(new int[] {num, x, cnt});
+        visited[num][x] = true;
+
+        int[] cur;
+        while(!q.isEmpty()) {
+            cur = q.poll();
+            num = cur[0];
+            x = cur[1];
+            cnt = cur[2];
+
+            if (num == N) return cnt;
+
+            for(int dx=1; dx>=-1; dx--) {
+                int nx = x + dx;
+                int next = num + nx;
+
+                if (nx >= 1 && next <= N && !isSmall[next]) {
+                    if (visited[next][nx]) continue;
+
+                    visited[next][nx] = true;
+                    q.offer(new int[] {next, nx, cnt+1});
+                }
+            }
+        }
+
+        return -1;
+    }//bfs
     
 
     private static int sol() {
