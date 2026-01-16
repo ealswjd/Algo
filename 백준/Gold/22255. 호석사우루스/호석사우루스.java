@@ -25,43 +25,43 @@ public class Main {
 
     private static int getMin() {
         PriorityQueue<Position> pq = new PriorityQueue<>();
-        int[][][] minCost = new int[3][N][M]; // 최소 충격량
+        int[][][] minCost = new int[K][N][M]; // 최소 충격량
 
-        for(int i=0; i<3; i++) {
+        for(int i=0; i<K; i++) {
             for(int j=0; j<N; j++) {
                 Arrays.fill(minCost[i][j], MAX);
             }
         }
 
-        int r = sr, c = sc, cnt = 0, cost = 0;
-        pq.offer(new Position(r, c, cnt, cost));
-        minCost[cnt][r][c] = cost;
+        int r = sr, c = sc, k = 0, cost = 0;
+        pq.offer(new Position(r, c, k, cost));
+        minCost[k][r][c] = cost;
 
         Position cur;
         while(!pq.isEmpty()) {
             cur = pq.poll();
             r = cur.r;
             c = cur.c;
-            cnt = cur.cnt;
-            cost = cur.cost;
+            k = cur.k; // 이동 횟수(순서)
+            cost = cur.cost; // 충격량
 
-            if (minCost[cnt][r][c] < cost) {
+            if (minCost[k][r][c] < cost) {
                 continue;
             }
             if (r == er && c == ec) { // 탈출구
                 return cost;
             }
 
-            int k = (cnt + 1) % K; // 이동할 수 있는 방향
-            for(int i=0, len=dr[k].length; i<len; i++) {
-                int nr = r + dr[k][i];
-                int nc = c + dc[k][i];
+            int nk = (k + 1) % K; // 이동할 수 있는 방향
+            for(int i=0, len=dr[nk].length; i<len; i++) {
+                int nr = r + dr[nk][i];
+                int nc = c + dc[nk][i];
                 if (rangeCheck(nr, nc)) continue;
 
                 int nCost = cost + map[nr][nc]; // 이동 시 충격량
-                if (minCost[k][nr][nc] > nCost) {
-                    pq.offer(new Position(nr, nc, k, nCost));
-                    minCost[k][nr][nc] = nCost;
+                if (minCost[nk][nr][nc] > nCost) {
+                    pq.offer(new Position(nr, nc, nk, nCost));
+                    minCost[nk][nr][nc] = nCost;
                 }
             }
         }
@@ -105,12 +105,12 @@ public class Main {
     private static class Position implements Comparable<Position> {
         int r;
         int c;
-        int cnt;
+        int k;
         int cost;
-        Position(int r, int c, int cnt, int cost) {
+        Position(int r, int c, int k, int cost) {
             this.r = r;
             this.c = c;
-            this.cnt = cnt;
+            this.k = k;
             this.cost = cost;
         }
 
