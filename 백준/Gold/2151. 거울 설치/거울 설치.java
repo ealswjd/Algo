@@ -14,7 +14,7 @@ public class Main {
     private static int N; // 집의 크기
     private static int sr, sc, er, ec;
     private static char[][] map; // 집
-    
+
 
     public static void main(String[] args) throws IOException {
         init();
@@ -22,7 +22,7 @@ public class Main {
 
         System.out.print(min);
     }//main
-    
+
 
     private static int getMin() {
         int min = MAX;
@@ -53,7 +53,6 @@ public class Main {
                 continue;
             }
             if (map[r][c] == E) {
-                min = Math.min(min, cnt);
                 continue;
             }
 
@@ -82,14 +81,18 @@ public class Main {
             }
         }
 
+        for(int d=0; d<DIR; d++) {
+            min = Math.min(min, minCnt[d][er][ec]);
+        }
+
         return min;
     }//getMin
-    
+
 
     private static boolean rangeCheck(int r, int c) {
         return r < 0 || r >= N || c < 0 || c >= N || map[r][c] == WALL;
     }//rangeCheck
-    
+
 
     private static void init() throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -106,6 +109,9 @@ public class Main {
                         sr = r;
                         sc = c;
                         map[r][c] = EMPTY;
+                    } else {
+                        er = r;
+                        ec = c;
                     }
                 }
             }
@@ -127,6 +133,5 @@ public class Main {
             this.dir = dir;
         }
     }//Position
-    
 
 }//class
