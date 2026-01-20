@@ -2,7 +2,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Arrays;
-import java.util.PriorityQueue;
+import java.util.LinkedList;
+import java.util.Queue;
 
 // https://www.acmicpc.net/problem/2151
 public class Main {
@@ -24,7 +25,8 @@ public class Main {
     
 
     private static int getMin() {
-        PriorityQueue<Position> pq = new PriorityQueue<>();
+        int min = MAX;
+        Queue<Position> q = new LinkedList<>();
         int[][][] minCnt = new int[DIR][N][N]; // [방향][행][열] 거울 최소 개수
 
         for(int i=0; i<DIR; i++) {
@@ -35,13 +37,13 @@ public class Main {
 
         int r = sr, c = sc, cnt = 0, dir;
         for(int d=0; d<DIR; d++) {
-            pq.offer(new Position(r, c, cnt, d));
+            q.offer(new Position(r, c, cnt, d));
             minCnt[d][r][c] = cnt;
         }
 
         Position cur;
-        while(!pq.isEmpty()) {
-            cur = pq.poll();
+        while(!q.isEmpty()) {
+            cur = q.poll();
             r = cur.r;
             c = cur.c;
             cnt = cur.cnt; // 거울 개수
@@ -51,7 +53,8 @@ public class Main {
                 continue;
             }
             if (map[r][c] == E) {
-                return cnt;
+                min = Math.min(min, cnt);
+                continue;
             }
 
             // 거울 설치 x
@@ -59,7 +62,7 @@ public class Main {
             int nc = c + dc[dir];
             if (!rangeCheck(nr, nc) && minCnt[dir][nr][nc] > cnt) {
                 minCnt[dir][nr][nc] = cnt;
-                pq.offer(new Position(nr, nc, cnt, dir));
+                q.offer(new Position(nr, nc, cnt, dir));
             }
 
             // 거울 설치
@@ -73,13 +76,13 @@ public class Main {
 
                     if (!rangeCheck(nr, nc) && minCnt[nDir][nr][nc] > nCnt) {
                         minCnt[nDir][nr][nc] = nCnt;
-                        pq.offer(new Position(nr, nc, nCnt, nDir));
+                        q.offer(new Position(nr, nc, nCnt, nDir));
                     }
                 }
             }
         }
 
-        return -1;
+        return min;
     }//getMin
     
 
@@ -111,7 +114,7 @@ public class Main {
         br.close();
     }//init
 
-    private static class Position implements Comparable<Position> {
+    private static class Position {
         int r;
         int c;
         int cnt; // 거울 개수
@@ -122,11 +125,6 @@ public class Main {
             this.c = c;
             this.cnt = cnt;
             this.dir = dir;
-        }
-
-        @Override
-        public int compareTo(Position p) {
-            return this.cnt - p.cnt;
         }
     }//Position
     
