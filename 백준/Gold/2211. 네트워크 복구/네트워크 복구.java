@@ -104,7 +104,6 @@ public class Main {
     private static class Line implements Comparable<Line> {
         int to; // 연결된 컴퓨터 번호
         int time; // 통신 시간
-        int lineCnt; // 복구 회선 수
 
         Line(int to, int time) {
             this.to = to;
