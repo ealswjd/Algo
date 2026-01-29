@@ -18,17 +18,13 @@ public class Main {
 
     public static void main(String[] args) throws IOException {
         init();
-        int result = dijkstra();
+        String result = dijkstra();
 
-        if (result == -1) {
-            System.out.print("NO SOLUTION");
-        } else {
-            System.out.print(result);
-        }
+        System.out.print(result);
     }//main
 
 
-    private static int dijkstra() {
+    private static String dijkstra() {
         PriorityQueue<Line> pq = new PriorityQueue<>();
         int[][] minCnt = new int[N][M];
 
@@ -57,7 +53,7 @@ public class Main {
 
             if (minCnt[r][c] < cnt) continue;
             if (r == N-1 && c == M-1 && dir == 0) {
-                return cnt;
+                return String.valueOf(cnt);
             }
 
             // 같은 방향 전선 이동
@@ -90,7 +86,7 @@ public class Main {
             }
         }
 
-        return -1;
+        return "NO SOLUTION";
     }//dijkstra
 
     private static boolean rangeCheck(int r, int c) {
