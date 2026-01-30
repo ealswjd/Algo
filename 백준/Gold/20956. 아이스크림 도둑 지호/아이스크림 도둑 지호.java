@@ -11,8 +11,8 @@ public class Main {
     private static final int MINT = 7; // 민트초코는 7의 배수
     private static int N, M; // 아이스크림 개수, 먹을 아이스크림 개수
     private static IceCream[] iceCreams; // 아이스크림
-
     
+
     public static void main(String[] args) throws IOException {
         init();
         sol();
@@ -24,9 +24,9 @@ public class Main {
         boolean isReversed = false; // 반대 방향
         int idx = 0; // 현재 인덱스
         int curAmount; // 현재 양
+        Deque<IceCream> sameAmount = new ArrayDeque<>(); // 같은양끼리
 
         while(M > 0 && idx < N) {
-            Deque<IceCream> sameAmount = new ArrayDeque<>(); // 같은양끼리
             curAmount = iceCreams[idx].amount; // 현재 가장 많은 아이스크림 양
 
             // 같은 양 다 담아주기
@@ -53,6 +53,7 @@ public class Main {
                     isReversed = !isReversed;
                 }
             }
+
         }
 
         System.out.print(ans);
@@ -99,6 +100,5 @@ public class Main {
             return i.amount - this.amount;
         }
     }//IceCream
-    
 
 }//class
