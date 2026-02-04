@@ -1,4 +1,5 @@
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
@@ -6,75 +7,102 @@ import java.util.StringTokenizer;
 
 // https://www.acmicpc.net/problem/15686
 public class Main {
-	static int N, M;
-	static int[][] map, chickens;
-	static List<int[]> homeList, cList;
-	static int min;
+    private static final int MAX = 25252525;
+    private static int M; // 영업할 치킨집 개수
+    private static int H, C; // 집 개수, 치킨집 개수
+    private static int result; // 도시의 치킨 거리의 최솟값
+    private static int[] pick; // 선택한 치킨집
+    private static int[][] dist; // i번 집과 j번 치킨집 거리
 
-	public static void main(String[] args) throws Exception {
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		StringTokenizer st = new StringTokenizer(br.readLine());
-		N = Integer.parseInt(st.nextToken()); // 도시의 크기
-		M = Integer.parseInt(st.nextToken()); // 치킨집 최대 개수
-		
-		init();
-		for(int i=1; i<=N; i++) {
-			st = new StringTokenizer(br.readLine());
-			for(int j=1; j<=N; j++) {
-				map[i][j] = Integer.parseInt(st.nextToken());
-				switch (map[i][j]) {
-				case 0: continue;
-				case 1: // 집
-					homeList.add(new int[] {i, j});
-					break;
-				case 2: // 치킨집
-					cList.add(new int[] {i, j});
-					break;
-				}//switch
-			}//for j
-		}//for i
 
-		min = 987654321; // 도시의 치킨 거리의 최솟값 
-		comb(0, 0); // 치킨집 비교해보기
-		System.out.print(min);
-	}//main
+    public static void main(String[] args) throws IOException {
+        init();
+        comb(0, 0);
 
-	private static void comb(int start, int cnt) {
-		if(cnt == M) { // 치킨집 M개 탐색 끝
-			getMin(); // 최솟값 구하기
-			return;
-		}//if
-		
-		for(int i=start, size=cList.size(); i<size; i++) {
-			chickens[cnt] = cList.get(i);
-			comb(i+1, cnt+1);
-		}//for		
-	}//comb
+        System.out.print(result);
+    }//main
 
-	private static void getMin() {
-		int sum = 0; // 도시의 치킨 거리
-		
-		for(int[] home : homeList) { // 집
-			int minDist = 987654321; // 가까운 치킨거리
-			int r1 = home[0]; // 집 행
-			int c1 = home[1]; // 집 열
-			for(int[] chicken : chickens) { // 치킨집
-				int r2 = chicken[0]; // 치킨 행
-				int c2 = chicken[1]; // 치킨 열
-				int dist = Math.abs(r1-r2) + Math.abs(c1-c2); // 치킨 거리
-				minDist = Math.min(minDist, dist); // 가까운 치킨 거리 갱신
-			}//for chicken
-			sum += minDist; // 도시의 치킨 거리 합산
-		}//for home
-		
-		min = Math.min(min, sum); // 도시의 치킨 거리의 최솟값 
-	}//getMin
 
-	private static void init() {
-		map = new int[N+1][N+1]; // 크기가 N×N인 도시
-		chickens = new int[M][2]; // 폐업시지지 않을 치킨집
-		homeList = new ArrayList<>(); // 집 정보 리스트
-		cList = new ArrayList<>(); // 치킨집 정보 리스트
-	}//init
+    private static void comb(int cur, int cnt) {
+        if (cnt == M) {
+            getMinDist();
+            return;
+        }
+
+        for(int i = cur; i< C; i++) {
+            pick[cnt] = i; // i번째 치킨집 선택
+            comb(i + 1, cnt + 1);
+        }
+    }//comb
+
+    private static void getMinDist() {
+        int sum = 0;
+        int minDist;
+
+        for(int h = 0; h< H; h++) {
+            minDist = MAX;
+            for(int c : pick) {
+                minDist = Math.min(minDist, dist[h][c]);
+            }
+
+            sum += minDist;
+        }
+
+        result = Math.min(result, sum);
+    }//getTotalDist
+
+
+    private static void init() throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        // N(2 ≤ N ≤ 50)과 M(1 ≤ M ≤ 13)이 주어진다.
+        StringTokenizer st = new StringTokenizer(br.readLine());
+        int N = Integer.parseInt(st.nextToken());
+        M = Integer.parseInt(st.nextToken());
+
+        List<Position> homeList = new ArrayList<>(); // 집
+        List<Position> chickenList = new ArrayList<>(); // 치킨집
+        pick = new int[M]; // 선택한 치킨집
+
+        for(int i=0; i<N; i++) {
+            st = new StringTokenizer(br.readLine());
+            for(int j=0; j<N; j++) {
+                int num = Integer.parseInt(st.nextToken());
+                if (num == 1) { // 1은 집
+                    homeList.add(new Position(i, j));
+                } else if (num == 2) { // 2는 치킨집
+                    chickenList.add(new Position(i, j));
+                }
+            }
+        }
+        br.close();
+
+        result = MAX; // 도시의 치킨 거리의 최솟값
+        H = homeList.size(); // 집 개수
+        C = chickenList.size(); // 치킨집 개수
+
+        // 치킨 거리 미리 구하기
+        dist = new int[H][C]; // h번째 집과 c번째 치킨집 거리
+        for(int h = 0; h< H; h++) {
+            Position home = homeList.get(h);
+
+            for(int c = 0; c< C; c++) {
+                Position chicken = chickenList.get(c);
+
+                dist[h][c] = Math.abs(home.r - chicken.r)
+                        + Math.abs(home.c - chicken.c);
+            }
+        }
+
+    }//init
+
+    private static class Position {
+        int r;
+        int c;
+        Position(int r, int c) {
+            this.r = r;
+            this.c = c;
+        }
+    }//Position
+
 
 }//class
