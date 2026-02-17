@@ -11,21 +11,21 @@ public class Main {
 
     public static void main(String[] args) throws IOException {
         init();
-        sol(0);
+        sol(0, 0);
         // 인범이가 깰 수 있는 계란의 최대 개수를 출력한다.
         System.out.print(max);
     }//main
 
-    private static void sol(int cur) {
+    private static void sol(int cur, int broken) {
         // 마지막 계란까지 다 해봄
         if (cur == N) {
-            max = Math.max(max, getBroken());
+            max = Math.max(max, broken);
             return;
         }
 
         // 현재 계란이 이미 깨졌거나 모든 계란이 이미 깨짐
-        if (durability[cur] <= 0 || isAllBroken(cur)) {
-            sol(cur + 1);
+        if (durability[cur] <= 0 || broken == N-1) {
+            sol(cur + 1, broken);
             return;
         }
 
@@ -37,8 +37,12 @@ public class Main {
             durability[cur] -= weight[i];
             durability[i] -= weight[cur];
 
-            // 다음 계란으로 
-            sol(cur + 1);
+            int nBroken = 0;
+            if (durability[cur] <= 0) nBroken++;
+            if (durability[i] <= 0) nBroken++;
+
+            // 다음 계란으로
+            sol(cur + 1, broken + nBroken);
 
             // 복구
             durability[cur] += weight[i];
@@ -47,26 +51,6 @@ public class Main {
 
     }//sol
 
-    private static boolean isAllBroken(int cur) {
-        for(int i=0; i<N; i++) {
-            if (i != cur && durability[i] > 0) {
-                return false; // 아직 안 깨진 계란 존재
-            }
-        }
-
-        return true;
-    }//isAllBroken
-
-    private static int getBroken() {
-        int cnt = 0;
-
-        for(int i=0; i<N; i++) {
-            // 깨진 계란 개수 증가
-            if (durability[i] <= 0) cnt++;
-        }
-
-        return cnt;
-    }//getBroken
 
     private static void init() throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
