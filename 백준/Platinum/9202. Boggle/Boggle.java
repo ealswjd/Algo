@@ -12,9 +12,8 @@ public class Main {
     private static final int N = 4, MAX_IDX = N * N, MAX_LEN = 8;
 
     private static Trie trie; // 단어 사전에 들어있는 단어 트라이
-    private static int maxScore, maxLen; // 얻을 수 있는 최대 점수
+    private static int maxScore, maxLen, total; // 최대 점수, 길이, 찾은 단어 개수
     private static char[][] boggle; // Boggle 보드
-    private static Set<String> findWords; // 찾은 단어
     private static String longestWord; // 가장 긴 단어
 
 
@@ -44,51 +43,50 @@ public class Main {
             if (i < b -1) br.readLine();
 
             // boggle 게임 진행
-            game();
+            game(i);
 
             // 얻을 수 있는 최대 점수, 가장 긴 단어, 찾은 단어의 개수를 출력
             ans.append(maxScore).append(' ');
             ans.append(longestWord).append(' ');
-            ans.append(findWords.size()).append('\n');
+            ans.append(total).append('\n');
         }
         br.close();
 
         System.out.print(ans);
     }//main
 
-    private static void game() {
-        maxScore = 0;
-        findWords = new HashSet<>();
-        maxLen = 0;
-        longestWord = "";
+    private static void game(int b) {
+        maxScore = 0; // 가장 높은 점수
+        total = 0; // 찾은 단어 개수
+        maxLen = 0; // 가장 긴 단어의 길이
+        longestWord = ""; // 가장 긴 단어
 
         for(int idx=0; idx<MAX_IDX; idx++) {
             int r = idx / N;
             int c = idx % N;
             char key = boggle[r][c];
+            int cIdx = key - 'A';
 
-            if (trie.root.childNodes.containsKey(key)) {
-                dfs(idx, 1, 1 << idx, trie.root.childNodes.get(key));
+            if (trie.root.childNodes[cIdx] != null) {
+                dfs(b, idx, 1, 1 << idx, trie.root.childNodes[cIdx]);
             }
         }
 
     }//game
 
-    private static void dfs(int idx, int cnt, int mask, TrieNode curNode) {
-        // 현재 글자가 단어의 마지막
-        if (curNode.isEndOfWord) {
-            // 같은 단어를 여러 번 찾은 경우에는 한 번만 찾은 것
-            if (!findWords.contains(curNode.word)) {
-                int len = curNode.word.length();
-                maxScore += SCORE[len];
-                findWords.add(curNode.word);
+    private static void dfs(int b, int idx, int cnt, int mask, TrieNode curNode) {
+        // 현재 글자가 단어의 마지막이고 현재 boggle에서 처음 찾은 단어임
+        if (curNode.isEndOfWord && curNode.checked != b) {
+            int len = curNode.word.length(); // 현재 단어 길이
+            maxScore += SCORE[len]; // 점수 증가
+            curNode.checked = b; // 현재 보드 확인
+            total++; // 찾은 단어 개수
 
-                if (maxLen < len
-                        || (maxLen == len && curNode.word.compareTo(longestWord) < 0)
-                ) {
-                    longestWord = curNode.word;
-                    maxLen = len;
-                }
+            if (maxLen < len
+                    || (maxLen == len && curNode.word.compareTo(longestWord) < 0)
+            ) {
+                longestWord = curNode.word;
+                maxLen = len;
             }
         }
         // 단어는 최대 8글자
@@ -106,9 +104,9 @@ public class Main {
 
             char key = boggle[nr][nc];
             int nIdx = nr * N + nc;
-            if (curNode.childNodes.containsKey(key) && (mask & (1 << nIdx)) == 0) {
-                TrieNode nextNode = curNode.childNodes.get(key);
-                dfs(nIdx, cnt + 1, mask | (1 << nIdx), nextNode);
+            TrieNode nextNode = curNode.childNodes[key - 'A'];
+            if (nextNode != null && (mask & (1 << nIdx)) == 0) {
+                dfs(b, nIdx, cnt + 1, mask | (1 << nIdx), nextNode);
             }
         }
 
@@ -119,8 +117,9 @@ public class Main {
     }//inRange
 
     private static class TrieNode {
-        Map<Character, TrieNode> childNodes = new HashMap<>();
+        TrieNode[] childNodes = new TrieNode[26];
         boolean isEndOfWord; // 단어 끝
+        int checked = -1;
         String word;
     }//TrieNode
 
@@ -131,8 +130,11 @@ public class Main {
             TrieNode cur = root;
 
             for(char c : word.toCharArray()) {
-                cur.childNodes.putIfAbsent(c, new TrieNode());
-                cur = cur.childNodes.get(c);
+                int idx = c - 'A';
+                if (cur.childNodes[idx] == null) {
+                    cur.childNodes[idx] = new TrieNode();
+                }
+                cur = cur.childNodes[idx];
             }
 
             cur.isEndOfWord = true;
