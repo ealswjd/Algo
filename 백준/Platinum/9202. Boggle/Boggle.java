@@ -58,7 +58,7 @@ public class Main {
 
     private static void game() {
         maxScore = 0;
-        findWords = new TreeSet<>();
+        findWords = new HashSet<>();
         maxLen = 0;
         longestWord = "";
 
@@ -83,7 +83,7 @@ public class Main {
                 maxScore += SCORE[len];
                 findWords.add(curNode.word);
 
-                if (maxLen < len 
+                if (maxLen < len
                         || (maxLen == len && curNode.word.compareTo(longestWord) < 0)
                 ) {
                     longestWord = curNode.word;
@@ -119,7 +119,7 @@ public class Main {
     }//inRange
 
     private static class TrieNode {
-        Map<Character, TrieNode> childNodes = new TreeMap<>();
+        Map<Character, TrieNode> childNodes = new HashMap<>();
         boolean isEndOfWord; // 단어 끝
         String word;
     }//TrieNode
