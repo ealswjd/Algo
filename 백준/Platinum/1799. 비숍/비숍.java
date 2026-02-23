@@ -41,7 +41,7 @@ public class Main {
         int right = cur.right;
 
         // 선택
-        if (canSelect(left, right)) {
+        if (!usedL[left] && !usedR[right]) {
             usedL[left] = true;
             usedR[right] = true;
 
@@ -55,9 +55,6 @@ public class Main {
         dfs(idx+1, bCnt, bishops, isBlack);
     }//dfs
 
-    private static boolean canSelect(int left, int right) {
-        return !usedL[left] && !usedR[right];
-    }//canSelect
 
     private static void init() throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -76,11 +73,11 @@ public class Main {
             st = new StringTokenizer(br.readLine());
             for(int c=0; c<N; c++) {
                 map[r][c] = Integer.parseInt(st.nextToken());
-                
+
                 if (map[r][c] == 1) {
                     int left = r - c + N - 1;
                     int right = r + c;
-                    Bishop cur = new Bishop(r, c, left, right);
+                    Bishop cur = new Bishop(left, right);
 
                     if ((r + c) % 2 == 0) blackList.add(cur);
                     else whiteList.add(cur);
@@ -96,13 +93,9 @@ public class Main {
     }//init
 
     private static class Bishop {
-        int r; // 행
-        int c; // 열
         int left; // 좌상향 대각선 번호
         int right; // 우상향 대각선 번호
-        Bishop(int r, int c, int left, int right) {
-            this.r = r;
-            this.c = c;
+        Bishop(int left, int right) {
             this.left = left;
             this.right = right;
         }
