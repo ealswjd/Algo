@@ -18,9 +18,7 @@ public class Main {
         int result = 0; // 피자를 판매하는 방법의 가지 수
 
         for(int size = 0; size<= P; size++) {
-            if (A[size] > 0 && B[P - size] > 0) {
-                result += A[size] * B[P - size];
-            }
+            result += A[size] * B[P - size];
         }
 
         System.out.print(result);
