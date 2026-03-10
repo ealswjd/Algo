@@ -1,61 +1,63 @@
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.PriorityQueue;
+import java.util.Arrays;
 import java.util.StringTokenizer;
 
 // https://www.acmicpc.net/problem/1946
 public class Main {
-    static int N;
-    static PriorityQueue<Score> score;
+    private static int N; // 지원자 수
+    private static long[] scores; // 지원자의 서류+면접 등수
 
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringBuilder ans = new StringBuilder();
         int T = Integer.parseInt(br.readLine());
 
-        score = new PriorityQueue<>();
-        StringBuilder ans = new StringBuilder();
-        StringTokenizer st;
-        while(T-->0) {
-            N = Integer.parseInt(br.readLine());
-            for(int i=0; i<N; i++) {
-                st = new StringTokenizer(br.readLine());
-                int first = Integer.parseInt(st.nextToken());
-                int second = Integer.parseInt(st.nextToken());
-                score.offer(new Score(first, second));
-            }//for
+        while(T-- > 0) {
+            init(br);
+            int maxCnt = getCnt();
 
-            ans.append(getCnt()).append('\n');
-        }//while
+            ans.append(maxCnt).append('\n');
+        }
+
         br.close();
-
         System.out.print(ans);
     }//main
 
     private static int getCnt() {
-        int cnt = 1, max = score.poll().second;
-        int second;
-        while(!score.isEmpty()) {
-            second = score.poll().second;
-            if(second > max) continue;
-            cnt++;
-            max = second;
-        }//while
+        int cnt = 1;
+        int minInterview = (int) scores[0]; // 서류 심사 1등의 면접 순위
+
+        for(int i=1; i<N; i++) {
+            int curInterview = (int) scores[i]; // i번 지원자 면접 순위
+
+            // i번 지원자가 면접 잘 봤으면 선발
+            if (curInterview < minInterview) {
+                cnt++;
+                minInterview = curInterview;
+            }
+        }
 
         return cnt;
     }//getCnt
 
-    static class Score implements Comparable<Score> {
-        int first;
-        int second;
-        public Score(int first, int second) {
-            this.first = first;
-            this.second = second;
+    private static void init(BufferedReader br) throws IOException{
+        N = Integer.parseInt(br.readLine()); // 지원자의 수
+        scores = new long[N]; // 지원자의 서류심사 성적, 면접 성적의 순위
+
+        StringTokenizer st;
+        for(int i=0; i<N; i++) {
+            st = new StringTokenizer(br.readLine());
+            long docRank = Integer.parseInt(st.nextToken()); // 서류심사 성적 순위
+            int interviewRank = Integer.parseInt(st.nextToken()); // 면접 성적의 순위
+
+            // 서류 기준으로 정렬하도록
+            scores[i] = (docRank << 32) | interviewRank;
         }
 
-        @Override
-        public int compareTo(Score o) {
-            return this.first - o.first;
-        }
-    }//Score
+        // 서류 기준 정렬
+        Arrays.sort(scores);
+    }//init
 
 }//class
