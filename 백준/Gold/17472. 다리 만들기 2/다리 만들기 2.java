@@ -15,7 +15,7 @@ public class Main {
 	static int[] dr = {-1, 1, 0, 0};
 	static int[] dc = {0, 0, -1, 1};
 	static ArrayList<HashSet<int[]>> island;
-	static ArrayList<HashSet<Node>> nodeList;
+	static ArrayList<ArrayList<Node>> nodeList;
 
 	public static void main(String[] args) throws Exception {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -37,7 +37,7 @@ public class Main {
 		// 섬 개수 구하기 & 섬 번호 바꾸기
 		iCnt = getIslandCnt();
 		for(int i=0; i<iCnt; i++) {
-			nodeList.add(new HashSet<>());
+			nodeList.add(new ArrayList<>());
 		}//for
 		
 		bridgeConnection(); // 다리 연결
@@ -159,30 +159,7 @@ public class Main {
 		@Override
 		public int compareTo(Node n) {
 			return this.length - n.length;
-		}		
-		@Override
-		public int hashCode() {
-			final int prime = 31;
-			int result = 1;
-			result = prime * result + length;
-			result = prime * result + to;
-			return result;
-		}
-		@Override
-		public boolean equals(Object obj) {
-			if (this == obj)
-				return true;
-			if (obj == null)
-				return false;
-			if (getClass() != obj.getClass())
-				return false;
-			Node other = (Node) obj;
-			if (length != other.length)
-				return false;
-			if (to != other.to)
-				return false;
-			return true;
-		}	
+		}			
 	}//Node
 
 }//class
