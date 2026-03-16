@@ -107,7 +107,6 @@ public class Main {
 
         @Override
         public int compareTo(Node o) {
-            if(this.time == o.time) return this.cnt - o.cnt;
             return Long.compare(this.time, o.time);
         }
     }//Node
