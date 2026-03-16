@@ -12,37 +12,41 @@ public class Main {
     private static int[][] map; // 보드
     private static int[][] dp; // 최대 횟수
     private static boolean[][] visited; // 방문 체크
-    private static boolean isLoop; // 반복 여부
 
     public static void main(String[] args) throws IOException {
         init();
-        int max = sol(0, 0);
+        
+        try {
+            int max = sol(0, 0);
+            System.out.print(max);
+        } catch (CycleException e) {
+            System.out.print(-1);
+        }
 
-        System.out.print(max);
     }//main
 
     private static int sol(int r, int c) {
-        if (isLoop) return -1;
         if (!inRange(r, c)) return 0;
         if (visited[r][c]) {
-            isLoop = true;
-            return -1;
+            throw new CycleException();
         }
         if (dp[r][c] != 0) return dp[r][c];
 
-        int max = -1;
+        int max = 0;
         int x = map[r][c];
-        visited[r][c] = true;
 
+        visited[r][c] = true;
+        
         for(int i=0; i<4; i++) {
             int nr = r + DR[i] * x;
             int nc = c + DC[i] * x;
 
             max = Math.max(max, sol(nr, nc));
         }
+        
         visited[r][c] = false;
 
-        return dp[r][c] = isLoop ? -1 : max + 1;
+        return dp[r][c] = max + 1;
     }//sol
 
     private static boolean inRange(int r, int c) {
@@ -72,5 +76,8 @@ public class Main {
 
         br.close();
     }//init
+
+    // 사이클 발생을 알리는 예외 클래스
+    private static class CycleException extends RuntimeException {}
 
 }//class
