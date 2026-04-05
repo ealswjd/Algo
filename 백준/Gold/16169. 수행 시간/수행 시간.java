@@ -20,12 +20,7 @@ public class Main {
     private static void solve() {
         int[] dp = new int[N+1]; // i번 컴퓨터의 수행이 끝날 때까지 걸린 시간
 
-        // 제일 낮은 계급의 컴퓨터는 전달 받을 정보가 없으므로 시스템 시동과 동시에 동작
-        for(int i : rankList.get(1)) {
-            dp[i] = times[i];
-        }
-
-        for(int r=2; r<=maxRank; r++) {
+        for(int r=1; r<=maxRank; r++) {
             for(int cur : rankList.get(r)) {
                 int maxTime = 0;
 
