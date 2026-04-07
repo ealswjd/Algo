@@ -17,36 +17,41 @@ public class Main {
         init();
         solve();
     }//main
-    
+
     private static void solve() {
+        if (P <= workingCnt) {
+            System.out.print(0);
+            return;
+        }
+        
         Arrays.fill(minCost, -1);
         int result = dfs(workingCnt, status);
 
         System.out.print(result == MAX ? -1 : result);
     }//solve
-    
+
     private static int dfs(int cnt, int curStatus) {
-        if (P <= cnt || curStatus == total - 1) return 0;
+        if (cnt == P || curStatus == total - 1) return 0;
         if (minCost[curStatus] != -1) return minCost[curStatus];
-        
+
         int min = MAX;
-        
+
         for(int cur=0; cur<N; cur++) {
             // 현재 발전소 이미 켜져있으면 패스
             if ((curStatus & (1 << cur)) != 0) continue;
-            
+
             // 현재 발전소를 어떤 발전소에서 재시작할지 결정
             for(int prev=0; prev<N; prev++) {
-                // 이전 발전소에서 현재 발전소 재시작할 수 없는 상태면 패스
+                // 이전 발전소에서 현재 발전소 재시작할 수 없는 상태
                 if (cur == prev || (curStatus & (1 << prev)) == 0) {
                     continue;
                 }
-                // 현재 발전소 재시작 비용
+                // 현재 발전소 재시작할 경우 비용
                 int curCost = cost[prev][cur] + dfs(cnt + 1, curStatus | (1 << cur));
                 min = Math.min(min, curCost);
             }
         }
-        
+
         return minCost[curStatus] = min;
     }//dfs
 
