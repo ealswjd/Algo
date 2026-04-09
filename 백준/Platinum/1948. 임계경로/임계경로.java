@@ -16,16 +16,16 @@ public class Main {
     }//main
 
     private static void solve() {
-        int maxTime = getMaxTime(); // 모두 로마에 도착하는 데 걸리는 시간
+        int time = getMaxTime(); // 모두 로마에 도착하는 데 걸리는 시간
         int cnt = getCnt(); // 황금을 칠해야 할 도로의 수
 
-        System.out.printf("%d\n%d", maxTime, cnt);
+        System.out.printf("%d\n%d", time, cnt);
     }//solve
 
     private static int getCnt() {
         int cnt = 0;
         Queue<Integer> q = new LinkedList<>();
-        boolean[][] visited = new boolean[N+1][N+1];
+        boolean[] visited = new boolean[N+1];
 
         q.offer(end);
 
@@ -35,13 +35,15 @@ public class Main {
             for(Edge prev : reverseList.get(cur)) {
                 int to = prev.to;
                 long time = prev.time;
-                if (visited[cur][to]) continue;
 
                 // 현재 도로가 가장 오래 달린 사람들이 지나온 도로면 황금칠
                 if (maxTime[cur] - time == maxTime[to]) {
                     cnt++;
-                    q.offer(to);
-                    visited[cur][to] = true;
+                    
+                    if (!visited[to]) {
+                        q.offer(to);
+                        visited[to] = true;
+                    }
                 }
             }
         }
@@ -50,30 +52,28 @@ public class Main {
     }//getCnt
 
     private static int getMaxTime() {
-        Queue<Edge> q = new LinkedList<>();
-        int from = start;
+        Queue<Integer> q = new LinkedList<>();
+        int cur = start;
         int time = 0;
 
-        q.offer(new Edge(from, time));
+        q.offer(cur);
 
-        Edge cur;
         while(!q.isEmpty()) {
             cur = q.poll();
-            from = cur.to;
-            time = cur.time;
+            time = maxTime[cur];
 
-            if (from == end) {
+            if (cur == end) {
                 continue;
             }
 
-            for(Edge next : list.get(from)) {
+            for(Edge next : list.get(cur)) {
                 int to = next.to;
                 if (inDegree[to] == 0) continue;
 
                 maxTime[to] = Math.max(maxTime[to], time + next.time);
 
                 if (--inDegree[to] == 0) {
-                    q.offer(new Edge(to, maxTime[to]));
+                    q.offer(to);
                 }
             }
         }
