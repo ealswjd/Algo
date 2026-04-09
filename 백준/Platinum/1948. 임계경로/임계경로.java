@@ -7,7 +7,7 @@ import java.util.*;
 public class Main {
     private static int N, start, end; // 도시 개수, 시작 도시, 도착 도시
     private static int[] inDegree; // 진입차수
-    private static long[] maxTime; // 도시별 도착 시간
+    private static int[] maxTime; // 도시별 도착 시간
     private static List<List<Edge>> list, reverseList; // 도로의 정보
 
     public static void main(String[] args) throws IOException {
@@ -16,7 +16,7 @@ public class Main {
     }//main
 
     private static void solve() {
-        long maxTime = getMaxTime(); // 모두 로마에 도착하는 데 걸리는 시간
+        int maxTime = getMaxTime(); // 모두 로마에 도착하는 데 걸리는 시간
         int cnt = getCnt(); // 황금을 칠해야 할 도로의 수
 
         System.out.printf("%d\n%d", maxTime, cnt);
@@ -36,7 +36,7 @@ public class Main {
                 int to = prev.to;
                 long time = prev.time;
                 if (visited[cur][to]) continue;
-                
+
                 // 현재 도로가 가장 오래 달린 사람들이 지나온 도로면 황금칠
                 if (maxTime[cur] - time == maxTime[to]) {
                     cnt++;
@@ -49,10 +49,10 @@ public class Main {
         return cnt;
     }//getCnt
 
-    private static long getMaxTime() {
+    private static int getMaxTime() {
         Queue<Edge> q = new LinkedList<>();
         int from = start;
-        long time = 0;
+        int time = 0;
 
         q.offer(new Edge(from, time));
 
@@ -89,7 +89,7 @@ public class Main {
         list = new ArrayList<>(N+1); // 도로의 정보
         reverseList = new ArrayList<>(N+1); // 반대 방향 도로의 정보
         inDegree = new int[N+1]; // 진입차수
-        maxTime = new long[N+1]; // 도착 최대 시간
+        maxTime = new int[N+1]; // 도착 최대 시간
 
         for(int i=0; i<=N; i++) {
             list.add(new ArrayList<>());
@@ -119,8 +119,8 @@ public class Main {
 
     private static class Edge {
         int to;
-        long time;
-        Edge(int to, long time) {
+        int time;
+        Edge(int to, int time) {
             this.to = to;
             this.time = time;
         }
